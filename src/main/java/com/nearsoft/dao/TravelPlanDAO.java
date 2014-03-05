@@ -1,10 +1,10 @@
 package com.nearsoft.dao;
 
 import com.nearsoft.bean.Stock;
+import com.nearsoft.persistence.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import com.nearsoft.persistence.HibernateUtil;
 
 /**
  * Created by slopez on 2/27/14.
