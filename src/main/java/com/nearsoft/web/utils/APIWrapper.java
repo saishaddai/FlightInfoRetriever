@@ -5,5 +5,8 @@ package com.nearsoft.web.utils;
  */
 public interface APIWrapper {
 
-    public Object callAPI(Object... options);
+    public Object autoComplete(Object... options);
+    public Object getFlights(Object... options);
+    public Object getHotels(Object... options);
+    public Object getCars(Object... options);
 }
