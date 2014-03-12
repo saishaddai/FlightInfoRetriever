@@ -2,14 +2,7 @@ package com.nearsoft.web.utils.impl;
 
 import com.nearsoft.web.utils.APIConnection;
 import com.nearsoft.web.utils.APIWrapper;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.util.Date;
 
@@ -74,9 +67,7 @@ public class DespegarAPIWrapper implements APIWrapper {
      * <code>options[1]</code> must be the longitude
      * <code>options[2]</code> OPTIONAL must be the check in date. Default 'today'
      * <code>options[3]</code> OPTIONAL must be the check out date. Default 'today'
-     * <code>options[4]</code> OPTIONAL must be the . Default 
-     * <code>options[5]</code> OPTIONAL must be the number of infants (babies). Default 0
-     * <code>options[6]</code> OPTIONAL must be the type of flight (one way, round trip). Default 'one way'
+     * <code>options[4]</code> OPTIONAL must be a string that describe the number of adults, children, infants, etc. Default 1 adult
      */
     public Object getHotels(Object... options) {
         //example: http://api.despegar.com/availability/hotels/27.2833333/-108.05000000000001?checkin=2014-05-25&checkout=2014-05-30&distribution=1
