@@ -3,9 +3,10 @@
 }
 
 .configurationArea {
-    background-color:lightgray;
+    background-color:#c0c0c0;;
     width: 28%;
     border-radius:25px;
+    border: 16px solid lightgray;
 }
 
 .topConfiguration {
