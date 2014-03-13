@@ -2,16 +2,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title> Live and let Flight </title>
-    <link rel="stylesheet" href="resources/css/mystyle.css">
+    <link rel="stylesheet" href="/resources/css/mystyle.css">
+    <script type="text/javascript" src="/resources/js/libs/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="/resources/js/libs/handlebars-1.1.2.js"></script>
+    <script type="text/javascript" src="/resources/js/libs/ember-1.4.0.js"></script>
+    <script type="text/javascript" src="/resources/js/app.js"></script>
 </head>
 <body>
-<script type="text/x-handlebars" id="index">
-             <ul>
-             {{#each item in model}}
-                <li>{{item}}</li>
-             {{/each}}
-             </ul>
-        </script>
+<script type="text/x-handlebars">
+    {{outlet}}
+  </script>
+
 
 <%--Message : ${message}--%>
 <div class="configurationArea">
@@ -38,7 +39,7 @@
     </div>
 </div>
 
-<div class="resultsArea">
+<%--<div class="resultsArea">
     <div class="result odd">
         <div class="section1">
             <div class="price">$1,234</div>
@@ -75,7 +76,33 @@
             <div class="information">CDG, LAX</div>
         </div>
     </div>
-</div>
+</div>--%>
+
+
+<script type="text/x-handlebars" id="index">
+<div class="resultsArea">
+{{#each}}
+<div class="result even">
+        <div class="section1">
+            <div class="price">$ {{price}}</div>
+            <div class="type">{{type}}</div>
+        </div>
+        <div class="section2">
+            <div class="numbers">{{estimateDate1}} - {{estimateDate2}}</div>
+            <div class="information">{{companies}}</div>
+        </div>
+        <div class="section3">
+            <div class="numbers">{{estimateTimeTravel}}</div>
+            <div class="information">{{airports}}</div>
+        </div>
+        <div class="section4">
+            <div class="numbers">{{stops}}</div>
+            <div class="information">{{scales}}</div>
+        </div>
+    </div>
+    {{/each}}
+    </div>
+</script>
 
 </body>
 </html>
