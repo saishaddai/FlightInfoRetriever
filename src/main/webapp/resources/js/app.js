@@ -1,16 +1,22 @@
 App = Ember.Application.create();
 
+// put your routes here
 App.Router.map(function() {
-  // put your routes here
     this.resource('showResults');
+});
+
+App.IndexRoute = Ember.Route.extend({
+    model: function() {
+        return flights;
+    }
 });
 
 var flights = [{
     id : '1',
     price: '428',
     type: 'round trip',
-    estimateDate1: new Date('12-27-2014 8:45'),
-    estimateDate2: new Date('12-27-2014 10:45'),
+    estimateDate1: '8:45 am',
+    estimateDate2: '10:45 am',
     companies: ['Aeromexico', 'Delta'],
     estimateTimeTravel: '11h 00M',
     airports: ['HMO', 'JFK'],
@@ -20,8 +26,8 @@ var flights = [{
     id : '2',
     price: '728',
     type: 'round trip',
-    estimateDate1: new Date('12-27-2014 8:45'),
-    estimateDate2: new Date('12-27-2014 11:59'),
+    estimateDate1: '8:45 am',
+    estimateDate2: '11:59 am',
     companies: ['Delta', 'Aeromexico'],
     estimateTimeTravel: '12h 14M',
     airports: ['HMO', 'LGA'],
@@ -31,8 +37,8 @@ var flights = [{
     id : '3',
     price: '606',
     type: 'round trip',
-    estimateDate1: new Date('12-27-2014 17:45'),
-    estimateDate2: new Date('12-27-2014 8:20'),
+    estimateDate1: '17:45 pm',
+    estimateDate2: '8:20 am',
     companies: ['Aeromexico'],
     estimateTimeTravel: '11h 35M',
     airports: ['HMO', 'JFK'],
@@ -42,8 +48,8 @@ var flights = [{
     id : '4',
     price: '610',
     type: 'round trip',
-    estimateDate1: new Date('12-27-2014 11:40'),
-    estimateDate2: new Date('12-27-2014 12:56'),
+    estimateDate1: '11:40 am',
+    estimateDate2: '12:56 pm',
     companies: ['US Airways'],
     estimateTimeTravel: '7h 16m',
     airports: ['HMO', 'JFK'],
@@ -51,9 +57,3 @@ var flights = [{
     scales: ''
 }];
 
-
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return flights;
-  }
-});
