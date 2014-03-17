@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.nearsoft.bean.Stock" catalog="public" table="stock2" >
+    <class name="com.nearsoft.bean.Stock" table="stock2" >
         <id name="stockId" type="java.lang.Integer">
             <column name="STOK_ID" />
             <generator class="identity" />
