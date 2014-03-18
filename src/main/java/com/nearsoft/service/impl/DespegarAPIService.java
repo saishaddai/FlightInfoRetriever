@@ -1,7 +1,7 @@
-package com.nearsoft.web.utils.impl;
+package com.nearsoft.service.impl;
 
-import com.nearsoft.web.utils.APIConnection;
-import com.nearsoft.web.utils.APIWrapper;
+import com.nearsoft.service.APIService;
+import com.nearsoft.utils.APIConnection;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.net.ConnectException;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Created by slopez on 3/4/14.
  */
-public class DespegarAPIWrapper implements APIWrapper {
+public class DespegarAPIService implements APIService {
 
     private static String AUTOCOMPLETE_URL = " http://api.despegar.com/autocomplete/";
     private static String FLIGHTS_URL = "http://api.despegar.com/availability/flights/";

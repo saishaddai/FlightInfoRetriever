@@ -7,6 +7,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,12 @@ public class SiteController {
 
 
     @RequestMapping(value = "/flights" , method = RequestMethod.GET)
-    public String search(@RequestParam("from") String from,
-                         @RequestParam("to") String to,
-                         @RequestParam("startDate") String startDate,
-                         @RequestParam("endDate") String endDate,
-                         @RequestParam("type") String type,
-                         ModelMap model) {
+    public @ResponseBody List<Flight> search(@RequestParam("from") String from,
+                                             @RequestParam("to") String to,
+                                             @RequestParam("startDate") String startDate,
+                                             @RequestParam("endDate") String endDate,
+                                             @RequestParam("type") String type,
+                                             ModelMap model) {
 
         List<String> companies = new ArrayList<String>() {{
             add("Aeromexico");
@@ -64,7 +65,7 @@ public class SiteController {
         results.add(mockFlight9);
 
         model.addAttribute("results", new Gson().toJson(results.toArray()));
-        return "index";
+        return results;
     }
     /*{
                 id : '1',

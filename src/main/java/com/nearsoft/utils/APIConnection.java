@@ -1,4 +1,4 @@
-package com.nearsoft.web.utils;
+package com.nearsoft.utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

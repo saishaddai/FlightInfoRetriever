@@ -1,12 +1,11 @@
-package com.nearsoft.web.utils.impl;
+package com.nearsoft.service.impl;
 
-import com.nearsoft.web.utils.APIWrapper;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by slopez on 3/4/14.
  */
-public class TripitAPIWrapper implements APIWrapper {
+public class TripitAPIService implements APIWrapper {
 
     @Override
     public Object autoComplete(Object... options) {

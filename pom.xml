@@ -13,6 +13,7 @@
     <properties>
         <spring-version>4.0.2.RELEASE</spring-version>
         <hibernate-version>4.3.1.Final</hibernate-version>
+        <jackson-version>1.9.10</jackson-version>
     </properties>
 
     <dependencies>
@@ -45,11 +46,19 @@
             <version>${spring-version}</version>
         </dependency>
 
+
         <!-- spring for testing -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring-version}</version>
+        </dependency>
+
+        <!-- Jackson JSON Mapper -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson-version}</version>
         </dependency>
 
         <!-- postgres driver -->

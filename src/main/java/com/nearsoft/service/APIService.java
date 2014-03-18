@@ -1,9 +1,9 @@
-package com.nearsoft.web.utils;
+package com.nearsoft.service;
 
 /**
  * Created by slopez on 3/4/14.
  */
-public interface APIWrapper {
+public interface APIService {
 
     public Object autoComplete(Object... options);
     public Object getFlights(Object... options);
