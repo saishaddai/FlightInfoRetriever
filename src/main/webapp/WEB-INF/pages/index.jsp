@@ -3,6 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title> Live and let Flight </title>
     <link rel="stylesheet" href="/resources/css/mystyle.css">
+    <link rel="icon" type="image/x-icon" href="/resources/favicon.ico" />
     <script type="text/javascript" src="/resources/js/libs/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="/resources/js/libs/handlebars-1.1.2.js"></script>
     <script type="text/javascript" src="/resources/js/libs/ember-1.4.0.js"></script>
@@ -13,10 +14,10 @@
     {{outlet}}
   </script>
 
-<%--<script type="text/x-handlebars" id="form">--%>
+<script type="text/x-handlebars" id="index">
 <div class="configurationArea">
     <div class="topConfiguration">
-        <div class="optionConf"> <%--{{#link-to 'about'}}--%> Round Trip <%--{{/link-to}}--%> </div>
+        <%--<div class="optionConf"> Round Trip </div>--%>
         <div class="optionConf"> One Way </div>
     </div>
     <div class="middleConfiguration" >
@@ -41,9 +42,9 @@
         </form>
     </div>
 </div>
-<%--</script>--%>
+</script>
 
-<script type="text/x-handlebars" id="index">
+<script type="text/x-handlebars" id="search">
 <div class="resultsArea">
 {{#each}}
 <div class="result even">
