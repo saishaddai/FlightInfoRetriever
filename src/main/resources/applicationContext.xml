@@ -36,4 +36,6 @@
 
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
+    <bean id="apiService" class="com.nearsoft.service.impl.DespegarAPIService" />
+
 </beans>
