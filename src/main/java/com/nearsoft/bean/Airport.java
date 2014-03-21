@@ -1,7 +1,6 @@
 package com.nearsoft.bean;
 
-
-import com.sun.istack.internal.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 
@@ -38,7 +37,7 @@ public class Airport {
     }
     private Long id ;
 
-    @NotNull @Column(updatable=false)
+    @NotBlank @Column(updatable=false)
     public String getName() {
         return name;
     }
@@ -47,7 +46,7 @@ public class Airport {
     }
     private String name;
 
-    @NotNull @Column(updatable=false)
+    @NotBlank @Column(updatable=false)
     public String getIataCode() {
         return iataCode;
     }
@@ -56,7 +55,7 @@ public class Airport {
     }
     private String iataCode;
 
-    @NotNull @Column(updatable=false)
+    @NotBlank @Column(updatable=false)
     public String getCountry() {
         return country;
     }
@@ -65,7 +64,7 @@ public class Airport {
     }
     private String country;
 
-    @NotNull @Column(updatable=false)
+    @NotBlank @Column(updatable=false)
     public String getCity() {
         return city;
     }
