@@ -134,4 +134,9 @@
 
 .daForm {
     display: inline-flex;
+    margin-bottom: 17px;
+}
+
+.toLeft {
+    margin-left: 1px;
 }
