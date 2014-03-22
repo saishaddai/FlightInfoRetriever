@@ -18,14 +18,15 @@
 <div class="configurationArea">
     <div class="topConfiguration">
         <%--<div class="optionConf"> Round Trip </div>--%>
-        <div class="optionConf"> One Way </div>
+        <%-- <div class="optionConf"> One Way </div> --%>
+        <button class="optionConf" {{action "selectType"}}>One Way</button>
     </div>
     <div class="middleConfiguration" >
-        <form method="get" class="daForm" action="">
+        <div class="daForm" >
         <div class="config1">
-            <input type="text" class="input" name="sourceFlight" id="sourceFlight" size="31" maxlength="255" >  </input>&nbsp;
-            <%--{{input type="text" value=from }}--%>
-            <input type="text" class="input" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" >  </input>&nbsp;
+            {{input type="text" valueBinding="model.fromV" name="sourceFlight" id="sourceFlight" class="input" size="31" maxlength="255" }} &nbsp;
+            {{input type="text" valueBinding="model.toV" class="input toLeft" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" }}&nbsp;
+
             <select id="firstDay" class="firstDay" name="firstDay">
                 <option value="1" selected> Tomorrow </option>
                 <option value="2"> Next Week  </option>
@@ -39,9 +40,10 @@
             <div class="config2" >
                 <input type="button" value="Go" class="buttonF" />
             </div>
-        </form>
+        </div>
     </div>
 </div>
+{{outlet}}
 </script>
 
 <script type="text/x-handlebars" id="search">
