@@ -20,7 +20,7 @@ public class APIConnection {
         StringBuilder textView = new StringBuilder();
         HttpResponse response = null;
         try {
-            client.execute(request);
+            response = client.execute(request);
             // Get the response
             BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
             String line = "";
