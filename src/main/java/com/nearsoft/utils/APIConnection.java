@@ -17,6 +17,7 @@ public class APIConnection {
     public static Object callAPI(String url) throws ConnectException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
+        request.setHeader("X-ApiKey","AG28754");
         StringBuilder textView = new StringBuilder();
         HttpResponse response = null;
         try {
