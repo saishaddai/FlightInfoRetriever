@@ -26,6 +26,9 @@ public class Airport {
     private String country;
 
     @NotBlank @Column(updatable=false)
+    private String isoCountry;
+
+    @NotBlank @Column(updatable=false)
     private String city;
 
     public Airport(){}
@@ -35,11 +38,12 @@ public class Airport {
         this.setName(name);
         this.setIataCode(iataCode);
     }
-    public Airport(Long id, String name, String iataCode, String country, String city) {
+    public Airport(Long id, String name, String iataCode, String country, String isoCountry, String city) {
         this.setId(id);
         this.setName(name);
         this.setIataCode(iataCode);
         this.setCountry(country);
+        this.setIsoCountry(isoCountry);
         this.setCity(city);
     }
 
@@ -74,6 +78,14 @@ public class Airport {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getIsoCountry() {
+        return isoCountry;
+    }
+
+    public void setIsoCountry(String isoCountry) {
+        this.isoCountry = isoCountry;
     }
 
     public String getCity() {
