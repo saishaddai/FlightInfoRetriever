@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface AirportDAO {
 
-    Airport findById(Integer id);
+    Airport findById(Long id);
+    List<Airport> autoComplete(String part);
     List<Airport> findAll();
 }
