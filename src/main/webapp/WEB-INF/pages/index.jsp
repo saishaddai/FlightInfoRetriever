@@ -19,26 +19,19 @@
     <div class="topConfiguration">
         <%--<div class="optionConf"> Round Trip </div>--%>
         <%-- <div class="optionConf"> One Way </div> --%>
-        <button class="optionConf" {{action "selectType"}}>One Way</button>
+        <button class="optionConf" id="oneWay" {{action "oneWay"}}>One Way</button>
+        <button class="optionConf" id="roundTrip" {{action "roundTrip"}}>Round Trip</button>
     </div>
     <div class="middleConfiguration" >
         <div class="daForm" >
         <div class="config1">
-            {{input type="text" valueBinding="model.fromV" name="sourceFlight" id="sourceFlight" class="input" size="31" maxlength="255" }} &nbsp;
-            {{input type="text" valueBinding="model.toV" class="input toLeft" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" }}&nbsp;
-
-            <select id="firstDay" class="firstDay" name="firstDay">
-                <option value="1" selected> Tomorrow </option>
-                <option value="2"> Next Week  </option>
-                <option value="3"> Next Month </option>
-            </select>
-            <select id="secondDay" class="secondDay" name="secondDay">
-                <option value="1" selected> Next Week </option>
-                <option value="2"> Next Month </option>
-            </select>
+            {{input type="text" valueBinding="from" value="from" name="sourceFlight" id="sourceFlight" class="input" size="31" maxlength="255" }} &nbsp;
+            {{input type="text" valueBinding="to" class="input toLeft" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" }}&nbsp;
+            {{view Ember.Select content=days1 optionValuePath="content.id" optionLabelPath="content.startDate" class="firstDay" value=preSelectedDate1.id}}
+            {{view Ember.Select content=days2 optionValuePath="content.id" optionLabelPath="content.endDate" class="secondDay" value=preSelectedDate2.id}}
             </div>
             <div class="config2" >
-                <input type="button" value="Go" class="buttonF" />
+                <button class="buttonF" {{action "submitAction"}}>Go</button>
             </div>
         </div>
     </div>
@@ -68,7 +61,7 @@
         </div>
     </div>
     {{/each}}
-    </div>
+</div>
 </script>
 
 </body>
