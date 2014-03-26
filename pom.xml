@@ -101,10 +101,11 @@
             <version>${hibernate-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
+            <groupId>org.hibernate</groupId>
             <version>${hibernate-version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.hibernate</groupId>
