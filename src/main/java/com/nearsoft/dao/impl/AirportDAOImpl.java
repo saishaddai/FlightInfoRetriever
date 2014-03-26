@@ -3,15 +3,25 @@ package com.nearsoft.dao.impl;
 import com.nearsoft.bean.Airport;
 import com.nearsoft.dao.AirportDAO;
 import com.nearsoft.persistence.BaseHibernateDAO;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class AirportDAOImpl extends BaseHibernateDAO<Airport, Integer> implements AirportDAO {
+@Repository
+@Transactional(readOnly = true)
+public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements AirportDAO {
+
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    private SessionFactory sessionFactory;
+    public AirportDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     protected Class<Airport> getEntityClasss() {
@@ -24,7 +34,7 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Integer> implement
     }
 
     @Override
-    public Airport findById(Integer id) {
+    public Airport findById(Long id) {
         return find(id);
     }
 
@@ -32,5 +42,17 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Integer> implement
     public List<Airport> findAll() {
         return find();
     }
+
+    @Override
+    public List<Airport> autoComplete(String part) {
+        Criteria crit = getSessionFactory().getCurrentSession().createCriteria(Airport.class);
+        crit.add(Restrictions.ilike("name", '%' + part +'%'));
+        crit.add(Restrictions.ilike("iataCode", '%' + part +'%'));
+        crit.add(Restrictions.ilike("country", '%' + part +'%'));
+        crit.add(Restrictions.ilike("isoCountry", '%' + part +'%'));
+        crit.add(Restrictions.ilike("city", '%' + part +'%'));
+        return (List<Airport>) crit.list();
+    }
+
 
 }
