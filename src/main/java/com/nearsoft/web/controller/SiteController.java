@@ -1,7 +1,11 @@
 package com.nearsoft.web.controller;
 
+//import com.nearsoft.bean.Airport;
 import com.nearsoft.bean.Flight;
+//import com.nearsoft.dao.AirportDAO;
 import com.nearsoft.service.APIService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,20 +13,43 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class SiteController {
 
-    @Autowired
-    APIService apiService;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(value = "/" , method = RequestMethod.GET)
+    @Autowired
+    private APIService apiService;
+
+//    @Autowired
+//    private AirportDAO airportDAO;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
+
+//        List<Airport> airportList1 = airportDAO.findAll();
+//        logger.info("results from airportList1: " );
+//        List<Airport> airportList2 = airportDAO.findAll();
+//        logger.info("results from airportList2: " );
+
+        /*Airport airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);
+        airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);airport = airportDAO.findById(30916L);
+        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
+        logger.info("results from airport: " + airport);*/
+
         return "index";
     }
 
-    @RequestMapping(value = "/flights" , method = RequestMethod.GET)
+    @RequestMapping(value = "/flights", method = RequestMethod.GET)
     @ResponseBody
     public List<Flight> search(@RequestParam("from") String from,
                                @RequestParam("to") String to,
@@ -30,27 +57,12 @@ public class SiteController {
                                @RequestParam("endDate") String endDate,
                                @RequestParam("type") String type) {
 
-//        if(from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
-//            return new ArrayList<>();
-//        } else {
-            return (List<Flight>) apiService.getFlights(from, to, null, null, null, null, null);
-//        }
-
-
+        if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
+        }
     }
-    /*{
-                id : '1',
-                price: '428',
-                type: 'round trip',
-                estimateDate1: '8:45 am',
-                estimateDate2: '10:45 am',
-                companies: ['mexico', 'Delta'],
-                estimateTimeTravel: '11h 00M',
-                airports: ['HMO', 'JFK'],
-                stops: '1 stop',
-                scales: '3h 30m in MEX'
-    }*/
-
 }
 
 
