@@ -1,7 +1,5 @@
 package com.nearsoft.persistence;
 
-import com.nearsoft.bean.Flight;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
