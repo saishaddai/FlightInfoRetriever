@@ -6,6 +6,7 @@ import com.nearsoft.service.APIService;
 /**
  * Created by slopez on 3/4/14.
  */
+//@Service
 public class TripitAPIService implements APIService {
 
     @Override
