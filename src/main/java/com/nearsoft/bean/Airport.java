@@ -1,16 +1,22 @@
 package com.nearsoft.bean;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by slopez on 2/27/14.
  */
 @Entity
-@javax.persistence.Table(name="airports")
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-public class Airport {
+@Table(name="airports")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Airport implements Serializable {
 
     @Id
     @GeneratedValue
@@ -33,11 +39,6 @@ public class Airport {
 
     public Airport(){}
 
-    public Airport(Long id, String name, String iataCode) {
-        this.setId(id);
-        this.setName(name);
-        this.setIataCode(iataCode);
-    }
     public Airport(Long id, String name, String iataCode, String country, String isoCountry, String city) {
         this.setId(id);
         this.setName(name);
@@ -94,6 +95,47 @@ public class Airport {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Airport)) return false;
+
+        Airport airport = (Airport) o;
+
+        if (!city.equals(airport.city)) return false;
+        if (!country.equals(airport.country)) return false;
+        if (iataCode != null ? !iataCode.equals(airport.iataCode) : airport.iataCode != null) return false;
+        if (!id.equals(airport.id)) return false;
+        if (!isoCountry.equals(airport.isoCountry)) return false;
+        if (!name.equals(airport.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (iataCode != null ? iataCode.hashCode() : 0);
+        result = 31 * result + country.hashCode();
+        result = 31 * result + isoCountry.hashCode();
+        result = 31 * result + city.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Airport{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", iataCode='" + iataCode + '\'' +
+                ", country='" + country + '\'' +
+                ", isoCountry='" + isoCountry + '\'' +
+                ", city='" + city + '\'' +
+                '}';
     }
 }
 
