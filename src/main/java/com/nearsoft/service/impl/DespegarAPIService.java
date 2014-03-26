@@ -3,19 +3,19 @@ package com.nearsoft.service.impl;
 import com.nearsoft.bean.Flight;
 import com.nearsoft.service.APIService;
 import com.nearsoft.utils.APIConnection;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.log4j.Logger;
-
 /**
  * Created by slopez on 3/4/14.
  */
+@Service
 public class DespegarAPIService implements APIService {
 
     private static String AUTOCOMPLETE_URL = " http://api.despegar.com/autocomplete/";
@@ -38,7 +38,9 @@ public class DespegarAPIService implements APIService {
     public Object autoComplete(Object... options) {
         //example: http://api.despegar.com/autocomplete/mexi means get all the occurrences tha contains the word 'mexi'
         try {
-            return APIConnection.callAPI( AUTOCOMPLETE_URL + options[0] );
+            Map<String, String > headers = new HashMap<>();
+            headers.put("X-ApiKey","AG28754");
+            return APIConnection.callAPI( AUTOCOMPLETE_URL + options[0], headers );
         } catch (ConnectException e) {
             return "";
         }
@@ -77,7 +79,8 @@ public class DespegarAPIService implements APIService {
                     (options[5] == null ? 0 : options[5]); //infants
         }
         try {
-            return processFlightsAPIResponse(APIConnection.callAPI(query));
+            Map<String, String > headers = new HashMap<>();
+            return processFlightsAPIResponse(APIConnection.callAPI(query, headers));
         } catch (NullPointerException | IndexOutOfBoundsException | IOException e) {
             return null;
         }
@@ -106,7 +109,9 @@ public class DespegarAPIService implements APIService {
                 "checkout=" + (options[3] == null ? sdf.format(getDate(DespegarAPIService.NEXT_WEEK)) : sdf.format((Date) options[3]) ) + "&" +
                 "distribution=" + (options[4] == null ? 1 : options[4]);
         try {
-            return APIConnection.callAPI(query);
+            Map<String, String > headers = new HashMap<>();
+            headers.put("X-ApiKey","AG28754");
+            return APIConnection.callAPI(query, headers);
         } catch (ConnectException e) {
             return "";
         }
@@ -135,7 +140,9 @@ public class DespegarAPIService implements APIService {
                 (options[4] == null ? sdf.format(getDate(DespegarAPIService.TOMORROW)) : sdf.format((Date) options[4]) ) + "/" +
                 (options[5] == null ? sdf.format(getDate(DespegarAPIService.NEXT_WEEK)) : sdf.format((Date) options[5]) );
         try {
-            return APIConnection.callAPI( query );
+            Map<String, String > headers = new HashMap<>();
+            headers.put("X-ApiKey","AG28754");
+            return APIConnection.callAPI( query, headers );
         } catch (ConnectException e) {
             return "";
         }
