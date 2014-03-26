@@ -5,6 +5,8 @@ import com.nearsoft.dao.AirportDAO;
 import com.nearsoft.persistence.BaseHibernateDAO;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -46,11 +48,14 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
     @Override
     public List<Airport> autoComplete(String part) {
         Criteria crit = getSessionFactory().getCurrentSession().createCriteria(Airport.class);
-        crit.add(Restrictions.ilike("name", '%' + part +'%'));
-        crit.add(Restrictions.ilike("iataCode", '%' + part +'%'));
-        crit.add(Restrictions.ilike("country", '%' + part +'%'));
-        crit.add(Restrictions.ilike("isoCountry", '%' + part +'%'));
-        crit.add(Restrictions.ilike("city", '%' + part +'%'));
+        String preffixSuffix = "%" + part +"%";
+        Disjunction or = Restrictions.disjunction();
+        or.add(Restrictions.ilike("name", preffixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("iataCode", preffixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("country", preffixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("isoCountry", preffixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("city", preffixSuffix, MatchMode.ANYWHERE));
+        crit.add(or);
         return (List<Airport>) crit.list();
     }
 
