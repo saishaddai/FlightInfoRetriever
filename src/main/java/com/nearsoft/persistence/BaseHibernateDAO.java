@@ -25,7 +25,7 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
 
     @SuppressWarnings("unchecked")
     protected List<T> find() {
-        return (List<T>) getCurrentSession().createQuery("from " + entityClasss.getCanonicalName()).list();
+        return (List<T>) getCurrentSession().createQuery("from " + entityClasss.getCanonicalName()).setCacheable(true).list();
     }
 
     @SuppressWarnings("unchecked")

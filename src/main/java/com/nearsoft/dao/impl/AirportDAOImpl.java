@@ -19,10 +19,17 @@ import java.util.List;
 public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements AirportDAO {
 
     private final SessionFactory sessionFactory;
+    private Criteria criteria;
 
     @Autowired
     public AirportDAOImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+        criteria = null;
+    }
+    //@Autowired
+    public AirportDAOImpl(SessionFactory sessionFactory, Criteria criteria) {
+        this.sessionFactory = sessionFactory;
+        this.criteria = criteria;
     }
 
     @Override
@@ -33,6 +40,10 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
     @Override
     protected SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    protected Criteria getCriteria() {
+        return criteria;
     }
 
     @Override
@@ -47,7 +58,7 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
 
     @Override
     public List<Airport> autoComplete(String part) {
-        Criteria crit = getSessionFactory().getCurrentSession().createCriteria(Airport.class);
+        this.criteria = getSessionFactory().getCurrentSession().createCriteria(Airport.class);
         String preffixSuffix = "%" + part +"%";
         Disjunction or = Restrictions.disjunction();
         or.add(Restrictions.ilike("name", preffixSuffix, MatchMode.ANYWHERE));
@@ -55,8 +66,8 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
         or.add(Restrictions.ilike("country", preffixSuffix, MatchMode.ANYWHERE));
         or.add(Restrictions.ilike("isoCountry", preffixSuffix, MatchMode.ANYWHERE));
         or.add(Restrictions.ilike("city", preffixSuffix, MatchMode.ANYWHERE));
-        crit.add(or);
-        return (List<Airport>) crit.list();
+        criteria.add(or);
+        return (List<Airport>) criteria.setCacheable(true).setCacheRegion("iataCode").list();
     }
 
 
