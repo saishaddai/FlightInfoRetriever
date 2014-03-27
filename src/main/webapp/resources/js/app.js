@@ -49,37 +49,37 @@ App.IndexController = Ember.ObjectController.extend({
         return $.getJSON(query).then(function(data) {
             return data;
         });
-    },
-    oneWay : function() {
-        $('#oneWay').css('background-color: #cccccc');
-        $('#roundTrip').removeAttr('style');
-        this.type="oneWay";
-        return this.type;
-    },
-    roundTrip : function() {
-        $('#roundTrip').css('background-color: #cccccc');
-        $('#oneWay').removeAttr('style');
-        this.type="roundTrip";
-        return this.type;
-    },
-    days1: [
-        {startDate: "Tomorrow", id: 1},
-        {startDate: "Next Week", id: 2},
-        {startDate: "Next Month", id: 3}
-    ],
-    preSelectedDate1: {
-        id: 1
-    },
-    days2: [
-        {endDate: "Next Week", id: 2},
-        {endDate: "Next Month", id: 3}
-    ],
-    preSelectedDate2: {
-        id: 2
-    },
-    from : "HMO",
-    to : "",
-    type : "oneWay"
+    }//,
+//    oneWay : function() {
+//        $('#oneWay').css('background-color: #cccccc');
+//        $('#roundTrip').removeAttr('style');
+//        this.type="oneWay";
+//        return this.type;
+//    },
+//    roundTrip : function() {
+//        $('#roundTrip').css('background-color: #cccccc');
+//        $('#oneWay').removeAttr('style');
+//        this.type="roundTrip";
+//        return this.type;
+//    },
+//    days1: [
+//        {startDate: "Tomorrow", id: 1},
+//        {startDate: "Next Week", id: 2},
+//        {startDate: "Next Month", id: 3}
+//    ],
+//    preSelectedDate1: {
+//        id: 1
+//    },
+//    days2: [
+//        {endDate: "Next Week", id: 2},
+//        {endDate: "Next Month", id: 3}
+//    ],
+//    preSelectedDate2: {
+//        id: 2
+//    },
+//    from : "HMO",
+//    to : "",
+//    type : "oneWay"
 });
 
 
