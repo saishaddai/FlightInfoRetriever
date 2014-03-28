@@ -1,11 +1,13 @@
 package com.nearsoft.persistence;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
 import java.io.Serializable;
 import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 
+@SuppressWarnings("unchecked")
 public abstract class BaseHibernateDAO<T, K extends Serializable> {
 
     private final Class<T> entityClasss = getEntityClasss();
@@ -18,29 +20,37 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
         return getSessionFactory().getCurrentSession();
     }
 
-    @SuppressWarnings("unchecked")
     protected T find(K id) {
         return (T) getCurrentSession().get(entityClasss, id);
     }
 
-    @SuppressWarnings("unchecked")
     protected List<T> find() {
-        return (List<T>) getCurrentSession().createQuery("from " + entityClasss.getCanonicalName()).setCacheable(true).list();
+        return findByCriteria(true);
     }
 
-    @SuppressWarnings("unchecked")
     protected boolean create(T type) {
-        return getCurrentSession().save(type) != null ? true : false;
+        return getCurrentSession().save(type) != null;
     }
 
-    @SuppressWarnings("unchecked")
     protected void update(T type) {
         getCurrentSession().saveOrUpdate(type);
     }
 
-    @SuppressWarnings("unchecked")
     protected void delete(T type) {
         getCurrentSession().delete(type);
     }
 
+    protected Criteria createCriteria(boolean cacheable, Criterion... criterion) {
+        Criteria criteria = getCurrentSession().createCriteria(entityClasss);
+        for (Criterion criterionItem : criterion) {
+            criteria.add(criterionItem);
+        }
+        criteria.setCacheable(cacheable);
+        return criteria;
+    }
+
+    protected List<T> findByCriteria(boolean cacheable, Criterion... criterion) {
+        Criteria criteria = createCriteria(cacheable, criterion);
+        return criteria.list();
+    }
 }
