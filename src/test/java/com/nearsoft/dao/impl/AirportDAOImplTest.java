@@ -3,6 +3,7 @@ package com.nearsoft.dao.impl;
 import com.nearsoft.bean.Airport;
 import com.nearsoft.bean.Flight;
 import com.nearsoft.dao.AirportDAO;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,6 +25,7 @@ public class AirportDAOImplTest {
 
     private SessionFactory sessionFactory;
     private Session session;
+    private Criteria criteria;
     private Query query;
     private AirportDAO dao;
 
@@ -32,6 +34,7 @@ public class AirportDAOImplTest {
         sessionFactory = createNiceMock(SessionFactory.class);
         session = createNiceMock(Session.class);
         query = createNiceMock(Query.class);
+        criteria = createNiceMock(Criteria.class);
 
         expect(sessionFactory.getCurrentSession()).andReturn(session).anyTimes();
 
@@ -85,6 +88,45 @@ public class AirportDAOImplTest {
         assertTrue(airport.getCountry().equals(airportOther.getCountry()));
 
         verify(sessionFactory, session);
+    }
+
+    @Test
+    public void testAutocomplete() throws Exception {
+        dao = new AirportDAOImpl(sessionFactory, criteria);
+        final String NULL_VALUE = null;
+        final String INVALID_VALUE= "#$@$@$";
+        final String OTHER_INVALID_VALUE= "%";
+        final String VALID_BUT_NOT_FOUND_VALUE = "";
+        final String VALID_BUT_HUGE_VALUE = "soifjsdoijfsoijfsdiaifsifjsifjsifjifjdisidfjisjfijsdifjcudnun";
+        final String VALID_VALUE = "Shangri";
+        final String OTHER_VALID_VALUE = "CN";
+        List<Airport> emptyList = new ArrayList<>();
+        List<Airport> results = new ArrayList<>();
+
+        expect(criteria.list()).andReturn(null).once();
+        expect(criteria.list()).andReturn(emptyList).times(4);
+
+        results.add(new Airport(30916L, "Diqing Airport", "DIG", "China", "CN", "Shangri-La"));
+        expect(criteria.list()).andReturn(results).once();
+
+        results.add(new Airport(27244L, "Yanji Chaoyangchuan Airport", "YAN", "China", "CN", "Yanji"));
+        expect(criteria.list()).andReturn(results).once();
+        replay(criteria, sessionFactory, session);
+
+        //null value
+        assertNull(dao.autoComplete(NULL_VALUE));
+
+        //empty list
+        assertTrue(dao.autoComplete(INVALID_VALUE).isEmpty());
+        assertTrue(dao.autoComplete(OTHER_INVALID_VALUE).isEmpty());
+        assertTrue(dao.autoComplete(VALID_BUT_NOT_FOUND_VALUE).isEmpty());
+        assertTrue(dao.autoComplete(VALID_BUT_HUGE_VALUE).isEmpty());
+
+        //not empty list
+        assertEquals(1, dao.autoComplete(VALID_VALUE).size());
+        assertEquals(2, dao.autoComplete(OTHER_VALID_VALUE).size());
+
+        verify(sessionFactory, session, criteria);
     }
 
     @Test
