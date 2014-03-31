@@ -1,4 +1,4 @@
-App = Ember.Application.create();
+App = Ember.Application.create(null);
 
 // put your routes here
 App.Router.map(function() {
@@ -21,16 +21,16 @@ App.Router.map(function() {
 });*/
 
 App.SearchParameters = Ember.Route.extend({
-    /*fromV : "",
+    fromV : "",
     toV : "",
     startDateV : "",
     endDateV : "",
-    typeV : ""*/
+    typeV : ""
 });
 
 App.IndexRoute = Ember.Route.extend({
     model: function(){
-        return App.SearchParameters.create()
+        return App.SearchParameters.create(null)
     },
     setupController : function(controller, model){
         controller.set("model", model);
@@ -38,18 +38,24 @@ App.IndexRoute = Ember.Route.extend({
 });
 
 App.IndexController = Ember.ObjectController.extend({
-    submitAction : function(){
-        var query = "/flights?from=";
-        query += "" + this.from + "&to=";//add from
-        query += "" + this.to + "&startDate=";//add to
-        query += "" + this.startDateV + "&endDate=";//add startDate
-        query += "" + this.endDateV + "&type=";//add endDate
-        query += this.type + "";//add type
-        //'/flights?from=&to=&startDate=&endDate=&type='
-        return $.getJSON(query).then(function(data) {
-            return data;
+//    submitAction : function(){
+//        var query = "/flights?from=";
+//        query += "" + SearchParameters.fromV + "&to=";//add from
+//        query += "" + SearchParameters.toV + "&startDate=";//add to
+//        query += "" + SearchParameters.startDateV + "&endDate=";//add startDate
+//        query += "" + SearchParameters.endDateV + "&type=";//add endDate
+//        query += SearchParameters.typeV + "";//add type
+//        //'/flights?from=&to=&startDate=&endDate=&type='
+//        return $.getJSON(query).then(function(data) {
+//            return data;
+//        });
+//    },
+    start : function() {
+        return $.getJSON("/airports").then(function(data) {
+            return "{airports : " + data + "}";
         });
-    }//,
+    }
+    //,
 //    oneWay : function() {
 //        $('#oneWay').css('background-color: #cccccc');
 //        $('#roundTrip').removeAttr('style');

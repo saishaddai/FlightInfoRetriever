@@ -1,9 +1,8 @@
 package com.nearsoft.web.controller;
 
-import com.nearsoft.bean.Airport;
 import com.nearsoft.bean.Flight;
-import com.nearsoft.dao.AirportDAO;
 import com.nearsoft.service.APIService;
+import com.nearsoft.service.AirportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,39 +24,39 @@ public class SiteController {
     private APIService apiService;
 
     @Autowired
-    private AirportDAO airportDAO;
+    private AirportService airportService;
 
+    /**
+     * Redirects to the landing page
+     * @return the index.jsp of the landing page
+     */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
-
-        airportDAO.findAll();
-        airportDAO.findAll();
-        airportDAO.findAll();
-        airportDAO.findAll();
-        List<Airport> airportList1 = airportDAO.autoComplete("mexi");
-        //logger.info("results from airportList1 mexi:   "  + airportList1);
-        airportList1 = airportDAO.autoComplete("shangr");
-        airportList1 = airportDAO.autoComplete("shan");
-        //logger.info("results from airportList1 shangr: "  + airportList1);
-        airportList1 = airportDAO.autoComplete("CN");
-        //logger.info("results from airportList1 CN:     "  + airportList1);
-//        List<Airport> airportList2 = airportDAO.findAll();
-//        logger.info("results from airportList2: " );
-
-        /*Airport airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);
-        airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);airport = airportDAO.findById(30916L);
-        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);airport = airportDAO.findById(27244L);
-        logger.info("results from airport: " + airport);*/
-
+        //airportService.getAirports();
         return "index";
     }
 
+
+    /**
+     * Gets a list of all the airports. The list came from a database and it changes almost any
+     * @return a list of strings, each one with a textual name and description of an airport
+     */
+    @RequestMapping(value = "/airports", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> airports() {
+        return airportService.getAirports();
+    }
+
+    /**
+     * Get the flights values with the given search options
+     * @param from the source of the flight
+     * @param to the destiny of the flight
+     * @param startDate the date of departure
+     * @param endDate the date of arriving
+     * @param type the type of flight ("oneWay", "roundTrip", "multiScale")
+     * @return a list of flight objects that match the options
+     * @since 1.0 Only works for type One Way (round trip is implemented but not tested)
+     */
     @RequestMapping(value = "/flights", method = RequestMethod.GET)
     @ResponseBody
     public List<Flight> search(@RequestParam("from") String from,

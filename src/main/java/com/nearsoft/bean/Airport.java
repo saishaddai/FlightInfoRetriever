@@ -1,5 +1,6 @@
 package com.nearsoft.bean;
 
+import com.sun.org.apache.regexp.internal.recompile;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.NotBlank;
@@ -128,14 +129,16 @@ public class Airport implements Serializable {
 
     @Override
     public String toString() {
-        return "Airport{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", iataCode='" + iataCode + '\'' +
-                ", country='" + country + '\'' +
-                ", isoCountry='" + isoCountry + '\'' +
-                ", city='" + city + '\'' +
-                '}';
+        //"CUL - Federal de Bachigualato International Airport - Culiacan, Mexico";
+        return this.iataCode + " - " + this.name + " - " + this.city + ", " + this.country;
+//        return "Airport{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", iataCode='" + iataCode + '\'' +
+//                ", country='" + country + '\'' +
+//                ", isoCountry='" + isoCountry + '\'' +
+//                ", city='" + city + '\'' +
+//                '}';
     }
 }
 

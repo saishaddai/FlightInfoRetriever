@@ -29,12 +29,12 @@ public class DespegarAPIService implements APIService {
 
     private static Logger logger = Logger.getLogger(APIService.class);
 
-    @Override
     /**
      * Auto complete takes a part of a string and retrieves flights, countries, airports, etc that match with the
      * given text. "Despegar API" removes accents and even some symbols
      * @param options <code>options[0]</code> MUST BE a string to search for auto complete. If cannot happen it will return empty string
      */
+    @Override
     public Object autoComplete(Object... options) {
         //example: http://api.despegar.com/autocomplete/mexi means get all the occurrences tha contains the word 'mexi'
         try {
@@ -46,7 +46,6 @@ public class DespegarAPIService implements APIService {
         }
     }
 
-    @Override
     /**
      * Get flights that match with the given options
      * @param options <code>options[0]</code> must be the source place in three-letter fashion. Follow international conventions
@@ -57,6 +56,7 @@ public class DespegarAPIService implements APIService {
      * <code>options[5]</code> OPTIONAL must be the number of infants (babies). Default 0
      * <code>options[6]</code> OPTIONAL must be the type of flight (one way, round trip). Default 'one way'
      */
+    @Override
     public Object getFlights(Object... options) {
         //example: http://api.despegar.com/availability/flights/oneWay/HMO/LON/2014-05-25/1/0/0
         //means a flight between HMO and LON in 2014-05-25, one adult, zero children and zero infants
@@ -86,7 +86,6 @@ public class DespegarAPIService implements APIService {
         }
     }
 
-    @Override
     /**
      * Hotels from api.despegar.com
      * @param options <code>options[0]</code> must be the latitude
@@ -95,6 +94,7 @@ public class DespegarAPIService implements APIService {
      * <code>options[3]</code> OPTIONAL must be the check out date. Default 'today'
      * <code>options[4]</code> OPTIONAL must be a string that describe the number of adults, children, infants, etc. Default 1 adult
      */
+    @Override
     public Object getHotels(Object... options) {
         //example: http://api.despegar.com/availability/hotels/27.2833333/-108.05000000000001?checkin=2014-05-25&checkout=2014-05-30&distribution=1
         //means looking for hotels in "Cerocahui, Chihuahua, México" (latitude 27.2833333, longitude -108.05000000000001)
@@ -117,7 +117,6 @@ public class DespegarAPIService implements APIService {
         }
     }
 
-    @Override
     /**
      * Cars from api.despegar.com
      * @param options <code>options[0]</code> pickUpPlaceType Pick up place type (airport or city)
@@ -127,6 +126,7 @@ public class DespegarAPIService implements APIService {
      * <code>options[4]</code> pickUpTime – Time of the pick up (yyyy-MM-dd.HH:mm)
      * <code>options[5]</code> dropOffTime – Time of the drop off (yyyy-MM-dd.HH:mm)
      */
+    @Override
     public Object getCars(Object... options) {
         //example: http://api.despegar.com/availability/cars/clusters/city/airport/HMO/PHX/2014-06-03.12%3A00/2014-06-15.11%3A00
         //means looking for cars to pick up somewhere in the city (not the airport) of Hermosillo in June 3, 2014 at 12:00,
@@ -186,9 +186,9 @@ public class DespegarAPIService implements APIService {
                         scales.add((String) ((Map) segment.get("arrival") ).get("location"));
                     }
                 }
-                logger.debug("$" + price + " " + formatISODate(estimatedDate1) + " " + companies.toString() + " " +
+                logger.debug("$" + price + " " + estimatedDate1 + " " + companies.toString() + " " +
                         estimatedTimeTravel + " " + airports.toString() + " " + scales.toString() + "");
-                results.add(new Flight(0L, price + "", formatISODate(estimatedDate1), formatISODate(estimatedDate2), companies.toString(),
+                results.add(new Flight(0L, price + "", estimatedDate1, estimatedDate2, companies.toString(),
                         estimatedTimeTravel, airports.toString(), stops, scales.size() > 1 ? scales.toString() : ""));
                 companies = new HashSet<>();
                 airports = new HashSet<>();

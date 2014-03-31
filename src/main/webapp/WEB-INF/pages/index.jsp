@@ -11,6 +11,7 @@
     <script type="text/javascript" src="/resources/js/app.js"></script>
     <script src="/resources/js/libs/jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
     <script>
+
         availableTags = [
             "UTK - Utirik Airport - Utirik Island, Marshal Islands",
             "WLR - Loring Seaplane Base - Loring, USA",
@@ -27,7 +28,7 @@
             "CTM - Chetumal International Airport, Chetumal, Mexico",
             "CEN - Ciudad Obregon International Airport - Ciudad Obregon, Mexico",
             "CPE - Ingeniero Alberto Acuna Ongay International Airport - Campeche, Mexico",
-            "CJS - Abraham Gonzalez International Airport - Ciudad Ju&aacute;rez, Mexico",
+            "CJS - Abraham Gonzalez International Airport - Ciudad Juarez, Mexico",
             "GDL - Don Miguel Hidalgo Y Costilla International Airport - Guadalajara, Mexico",
             "HMO - General Ignacio P. Garcia International Airport - Hermosillo, Mexico",
             "LMM - Valle del Fuerte International Airport - Los Mochis, Mexico",
@@ -48,8 +49,8 @@
     </script>
     <script>
         $(function() {
-            $( "#firstDay" ).datepicker();
-            $( "#secondDay" ).datepicker();
+            $( "#firstDay" ).datepicker({ dateFormat: "yy-mm-dd" });
+            $( "#secondDay" ).datepicker({ dateFormat: "yy-mm-dd" });
         });
     </script>
 </head>
@@ -63,14 +64,14 @@
     <div class="topConfiguration">
         <%--<div class="optionConf"> Round Trip </div>--%>
         <%-- <div class="optionConf"> One Way </div> --%>
-        <button class="optionConf" id="oneWay" {{action "oneWay"}}>One Way</button>
-        <button class="optionConf" id="roundTrip" {{action "roundTrip"}}>Round Trip</button>
+        <button type="button" class="optionConf" id="oneWay" {{action "oneWay"}}>One Way</button>
+        <%-- <button type="button" class="optionConf" id="roundTrip" {{action "roundTrip"}}>Round Trip</button> --%>
     </div>
     <div class="middleConfiguration" >
         <div class="daForm" >
         <div class="config1">
-            {{input type="text" valueBinding="from" value="from" name="sourceFlight" id="sourceFlight" class="input" size="31" maxlength="255" }} &nbsp;
-            {{input type="text" valueBinding="to" class="input toLeft" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" }}&nbsp;
+            {{input type="text" valueBinding="fromV"  name="sourceFlight" id="sourceFlight" class="input" size="31" maxlength="255" }} &nbsp;
+            {{input type="text" valueBinding="toV"  class="input toLeft" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" }}&nbsp;
             <input type="text" class="firstDay" id="firstDay">
             <input type="text" class="secondDay" id="secondDay">
             <%-- {{view Ember.Select content=days1 optionValuePath="content.id" optionLabelPath="content.startDate" class="firstDay" value=preSelectedDate1.id}}
