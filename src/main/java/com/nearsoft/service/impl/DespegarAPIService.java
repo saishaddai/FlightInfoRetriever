@@ -65,7 +65,7 @@ public class DespegarAPIService implements APIService {
                 (options[6] == null ? "oneWay" : options[6]) + "/" +
                 (options[0].toString().isEmpty() ? "HMO" : options[0].toString()) + "/" +
                 (options[1].toString().isEmpty() ? "MEX" : options[1].toString()) + "/" +
-                (options[2] == null ? sdf.format(getDate(DespegarAPIService.TOMORROW)) : sdf.format((Date) options[2]) ) + "/" ;
+                (options[2] == null ? sdf.format(getDate(DespegarAPIService.TOMORROW)) : options[2] ) + "/" ;
 
         if (options[3].toString() == "roundTrip") {
             query += sdf.format( (Date) options[3]) + "/" + //returning date
