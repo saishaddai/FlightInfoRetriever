@@ -1,33 +1,14 @@
-App = Ember.Application.create(null);
+App = Ember.Application.create();
 
-// put your routes here
 App.Router.map(function() {
-    this.resource('search');
 });
-
-/*App.SearchRoute = Ember.Route.extend({
-    model: function() {
-        var query = "/flights?from=";
-        query += "" + "&to=";//add from
-        query += "" + "&startDate=";//add to
-        query += "" + "&endDate=";//add startDate
-        query += "" + "&type=";//add endDate
-        query += "";//add type
-        //'/flights?from=&to=&startDate=&endDate=&type='
-        return $.getJSON(query).then(function(data) {
-            return data;
-        });
-    }
-});*/
-
 
 App.SearchParameters = Ember.Route.extend({
     fromV : "",
     toV : "",
     startDateV : "",
     endDateV : "",
-    typeV : "",
-    availableAirports : []
+    typeV : ""
 });
 
 App.IndexRoute = Ember.Route.extend({
@@ -40,38 +21,47 @@ App.IndexRoute = Ember.Route.extend({
 });
 
 App.IndexController = Ember.ObjectController.extend({
-    start : function() {
-        alert("calling airports");
-        return $.getJSON("/airports").then(function(data) {
-            this.availableAirports = data;
-            return "{airports : " + data + "}";
-        });
+    availableAirports : [],
+    actions : {//debe ser una funcion autoexecutable
+        start: function() {
+            $.getJSON("/airports").then(function(data) {
+                this.availableAirports = data;
+            });
+            $( "#sourceFlight" ).autocomplete({
+                source: this.availableAirports,
+                minLength: 3
+            });
+            $( "#destinyFlight" ).autocomplete({
+                source: this.availableAirports,
+                minLength: 3
+            });
+
+        }
     }
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    submitAction : function(){
-        var query = "/flights?from=";
-        query += "" + this.fromV + "&to=";//add from
-        query += "" + this.toV + "&startDate=";//add to
-        query += "" + this.startDateV + "&endDate=";//add startDate
-        query += "" + this.endDateV + "&type=";//add endDate
-        query += this.typeV + "";//add type
-        alert(query);
-        return $.getJSON(query).then(function(data) {
-            return data;
-        });
-    },
-    oneWay : function() {
-        $('#oneWay').css('background-color: #cccccc');
-        $('#roundTrip').removeAttr('style');
-        this.type="oneWay";
-        return this.type;
-    },
-    roundTrip : function() {
-        $('#roundTrip').css('background-color: #cccccc');
-        $('#oneWay').removeAttr('style');
-        this.type="roundTrip";
-        return this.type;
+    actions : {
+        oneWay : function() {
+//            $('#oneWay').css('background-color: #cccccc');
+//            $('#roundTrip').removeAttr('style');
+            App.SearchParameters.typeV="oneWay";
+        },
+        roundTrip : function() {
+//            $('#roundTrip').css('background-color: #cccccc');
+//            $('#oneWay').removeAttr('style');
+            App.SearchParameters.typeV="roundTrip";
+        },
+        submitAction : function(){
+            var query = "/flights?from=";
+            query += "" + App.SearchParameters.fromV + "&to=";//add from
+            query += "" + App.SearchParameters.toV + "&startDate=";//add to
+            query += "" + App.SearchParameters.startDateV + "&endDate=";//add startDate
+            query += "" + App.SearchParameters.endDateV + "&type=";//add endDate
+            query += App.SearchParameters.typeV + "";//add type
+            return $.getJSON(query).then(function(data) {
+                return data;
+            });
+        }
     }
 });
