@@ -1,7 +1,6 @@
 package com.nearsoft.dao.impl;
 
 import com.nearsoft.bean.Airport;
-import com.nearsoft.bean.Flight;
 import com.nearsoft.dao.AirportDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -9,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -92,7 +90,7 @@ public class AirportDAOImplTest {
 
     @Test
     public void testAutocomplete() throws Exception {
-        dao = new AirportDAOImpl(sessionFactory, criteria);
+        dao = new AirportDAOImpl(sessionFactory);
         final String NULL_VALUE = null;
         final String INVALID_VALUE= "#$@$@$";
         final String OTHER_INVALID_VALUE= "%";
