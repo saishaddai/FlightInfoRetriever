@@ -2,8 +2,6 @@ package com.nearsoft.bean;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -12,20 +10,37 @@ import java.io.Serializable;
 /**
  * Created by slopez on 2/27/14.
  */
+@Entity
+@Table(name="flights")
 public class Flight implements Serializable {
 
     @JsonIgnore
-    private Long id ;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @NotBlank @Column(updatable=false)
     private String price;
+
+    @NotBlank @Column(updatable=false)
     private String type;
     //@JsonProperty("est") if change the name of the attribute is needed
+    @NotBlank @Column(updatable=false)
     private String estimateDate1;
+    @NotBlank @Column(updatable=false)
     private String estimateDate2;
+    @NotBlank @Column(updatable=false)
     private String companies;
+    @NotBlank @Column(updatable=false)
     private String estimateTimeTravel;
+    @NotBlank @Column(updatable=false)
     private String airports;
+    @NotBlank @Column(updatable=false)
     private String stops;
+    @NotBlank @Column(updatable=false)
     private String scales;
+    @NotBlank @Column(updatable=true)
+    private boolean booked=false;
 
     /**
      * Sole constructor
@@ -43,18 +58,20 @@ public class Flight implements Serializable {
      * @param airports the airports involved in the flight (departure, arrival, scales)
      * @param stops the number of stops/scales to take in the journey
      * @param scales a description of the stops as convenient of the API interest
+     * @param booked true if the flights has benn taken for an user
      */
     public Flight(Long id, String price, String estimateDate1, String estimateDate2, String companies,
-                  String estimateTimeTravel, String airports, String stops, String scales) {
-        this.setId(id);
-        this.setPrice(price);
-        this.setEstimateDate1(estimateDate1);
-        this.setEstimateDate2(estimateDate2);
-        this.setCompanies(companies);
-        this.setEstimateTimeTravel(estimateTimeTravel);
-        this.setAirports(airports);
-        this.setStops(stops);
-        this.setScales(scales);
+                  String estimateTimeTravel, String airports, String stops, String scales, boolean booked) {
+        this.id= id;
+        this.price = price;
+        this.estimateDate1 = estimateDate1;
+        this.estimateDate2 = estimateDate2;
+        this.companies = companies;
+        this.estimateTimeTravel = estimateTimeTravel;
+        this.airports = airports;
+        this.stops = stops;
+        this.scales = scales;
+        this.booked = booked;
     }
 
 
@@ -136,5 +153,48 @@ public class Flight implements Serializable {
 
     public void setScales(String scales) {
         this.scales = scales;
+    }
+
+    public boolean isBooked() {
+        return booked;
+    }
+
+    public void setBooked(boolean booked) {
+        this.booked = booked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Flight flight = (Flight) o;
+
+        if (!airports.equals(flight.airports)) return false;
+        if (!companies.equals(flight.companies)) return false;
+        if (!estimateDate1.equals(flight.estimateDate1)) return false;
+        if (!estimateDate2.equals(flight.estimateDate2)) return false;
+        if (!estimateTimeTravel.equals(flight.estimateTimeTravel)) return false;
+        if (!id.equals(flight.id)) return false;
+        if (!price.equals(flight.price)) return false;
+        if (!scales.equals(flight.scales)) return false;
+        if (!stops.equals(flight.stops)) return false;
+        if (!type.equals(flight.type)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + price.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + estimateDate1.hashCode();
+        result = 31 * result + estimateDate2.hashCode();
+        result = 31 * result + companies.hashCode();
+        result = 31 * result + estimateTimeTravel.hashCode();
+        result = 31 * result + airports.hashCode();
+        result = 31 * result + stops.hashCode();
+        return result;
     }
 }

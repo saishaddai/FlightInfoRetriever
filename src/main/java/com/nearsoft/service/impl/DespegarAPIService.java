@@ -189,7 +189,7 @@ public class DespegarAPIService implements APIService {
                 logger.debug("$" + price + " " + estimatedDate1 + " " + companies.toString() + " " +
                         estimatedTimeTravel + " " + airports.toString() + " " + scales.toString() + "");
                 results.add(new Flight(0L, price + "", estimatedDate1, estimatedDate2, companies.toString(),
-                        estimatedTimeTravel, airports.toString(), stops, scales.size() > 1 ? scales.toString() : ""));
+                        estimatedTimeTravel, airports.toString(), stops, scales.size() > 1 ? scales.toString() : "", false));
                 companies = new HashSet<>();
                 airports = new HashSet<>();
                 scales = new HashSet<>();
@@ -208,16 +208,16 @@ public class DespegarAPIService implements APIService {
     private List<Flight> processFlightsAPIResponseMock(Object apiResponse) {
         //mock objects, get the real ones soon enough
         logger.warn("You're using the mock object version. It is ignoring the answer from API");
-        Flight mockFlight0 = new Flight(0L, "780", "8:45 am", "10:45 am", "Aeromexico/Delta", "11h 00M", "HMO, JFK", "1 stop", "3h 30m in MEX");
-        Flight mockFlight1 = new Flight(1L, "880", "10:00 am", "11:00 am", "Aeromexico/Air Canada", "16h 00M", "HMO,PHX,JFK", "2 stops", "2h 50m in MEX");
-        Flight mockFlight2 = new Flight(2L, "890", "9:30 am", "12:50 am", "Aeromexico/Delta", "10h 00M", "HMO, JFK", "1 stop", "2h 30m in HMO");
-        Flight mockFlight3 = new Flight(3L, "900", "12:50 am", "10:45 am", "Aeromexico/Air Canada", "11h 00M", "HMO,PHX,JFK", "1 stop", "1h 00m in WAS");
-        Flight mockFlight4 = new Flight(4L, "1100", "15:10 am", "9:25 am", "Aeromexico/Delta", "9h 00M", "HMO, JFK", "non-stop", "");
-        Flight mockFlight5 = new Flight(5L, "1234", "8:30 am", "11:10 am", "Aeromexico/Air Canada", "16h 00M", "HMO,PHX,JFK", "non-stop", "");
-        Flight mockFlight6 = new Flight(6L, "1345", "7:20 am", "10:00 am", "Aeromexico/Delta", "12h 00M", "HMO, JFK", "1 stop", "4h 00m in MEX");
-        Flight mockFlight7 = new Flight(7L, "1781", "6:45 am", "13:10 am", "Aeromexico/Air Canada", "11h 00M", "HMO,PHX,JFK", "1 stop", "2h 30m in PHX");
-        Flight mockFlight8 = new Flight(8L, "2100", "6:50 am", "14:25 am", "Aeromexico/Delta", "10h 00M", "HMO, JFK", "1 stop", "1h 50m in MEX");
-        Flight mockFlight9 = new Flight(9L, "2100", "8:45 am", "8:30 am", "Aeromexico/Air Canada", "6h 30M", "HMO,PHX,JFK", "non-stop", "");
+        Flight mockFlight0 = new Flight(0L, "780", "8:45 am", "10:45 am", "Aeromexico/Delta", "11h 00M", "HMO, JFK", "1 stop", "3h 30m in MEX", false);
+        Flight mockFlight1 = new Flight(1L, "880", "10:00 am", "11:00 am", "Aeromexico/Air Canada", "16h 00M", "HMO,PHX,JFK", "2 stops", "2h 50m in MEX", false);
+        Flight mockFlight2 = new Flight(2L, "890", "9:30 am", "12:50 am", "Aeromexico/Delta", "10h 00M", "HMO, JFK", "1 stop", "2h 30m in HMO", false);
+        Flight mockFlight3 = new Flight(3L, "900", "12:50 am", "10:45 am", "Aeromexico/Air Canada", "11h 00M", "HMO,PHX,JFK", "1 stop", "1h 00m in WAS", false);
+        Flight mockFlight4 = new Flight(4L, "1100", "15:10 am", "9:25 am", "Aeromexico/Delta", "9h 00M", "HMO, JFK", "non-stop", "", false);
+        Flight mockFlight5 = new Flight(5L, "1234", "8:30 am", "11:10 am", "Aeromexico/Air Canada", "16h 00M", "HMO,PHX,JFK", "non-stop", "", false);
+        Flight mockFlight6 = new Flight(6L, "1345", "7:20 am", "10:00 am", "Aeromexico/Delta", "12h 00M", "HMO, JFK", "1 stop", "4h 00m in MEX", false);
+        Flight mockFlight7 = new Flight(7L, "1781", "6:45 am", "13:10 am", "Aeromexico/Air Canada", "11h 00M", "HMO,PHX,JFK", "1 stop", "2h 30m in PHX", false);
+        Flight mockFlight8 = new Flight(8L, "2100", "6:50 am", "14:25 am", "Aeromexico/Delta", "10h 00M", "HMO, JFK", "1 stop", "1h 50m in MEX", false);
+        Flight mockFlight9 = new Flight(9L, "2100", "8:45 am", "8:30 am", "Aeromexico/Air Canada", "6h 30M", "HMO,PHX,JFK", "non-stop", "", false);
 
         List<Flight> results = new ArrayList<>();
         results.add(mockFlight0);
@@ -259,7 +259,7 @@ public class DespegarAPIService implements APIService {
 
     /**
      * Converts an ISO date to a java date (only hours and minutes)
-     * @param isoDate the iso date in a strign object
+     * @param isoDate the iso date in a string object
      * @return the date in a static format
      */
     private String formatISODate (String isoDate) {
