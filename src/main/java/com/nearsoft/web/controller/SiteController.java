@@ -71,6 +71,7 @@ public class SiteController {
             return (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
         }
     }
+
 }
 
 
