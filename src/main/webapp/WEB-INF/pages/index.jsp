@@ -38,7 +38,7 @@
         ];
         $(function() {
             $( "#sourceFlight" ).autocomplete({
-                source: availableTags,
+                source: this.availableAirports,
                 minLength: 3
             });
             $( "#destinyFlight" ).autocomplete({
