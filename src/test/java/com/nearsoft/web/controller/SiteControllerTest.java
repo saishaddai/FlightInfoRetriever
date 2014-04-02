@@ -20,14 +20,13 @@ import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * Created by slopez on 2/28/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration({"classpath:mvc-dispatcher-servlet.xml", "classpath:applicationContext.xml"})
+@ContextConfiguration({"classpath:mvc-dispatcher-servlet-test.xml", "classpath:applicationContext.xml"})
 public class SiteControllerTest {
 
     SiteController siteController;
