@@ -2,6 +2,7 @@ package com.nearsoft.web.controller;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,13 +71,13 @@ public class SiteControllerTest {
     @Test
     public void testWelcomeCorrectly() throws Exception {
         this.mockmvc.perform(get("/").accept(MediaType.parseMediaType("application/json")))
-                .andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/pages/index.jsp"));
+                .andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/pages/index-old.jsp"));
     }
 
 
     //only method 'airports' with path '/airports'
     @Test
-    public void testAirportshWithInvalidURL() throws Exception {
+    public void testAirportsWithInvalidURL() throws Exception {
         this.mockmvc.perform(get("airports").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().is4xxClientError());
 
@@ -85,24 +86,24 @@ public class SiteControllerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAirportshWithNullURL() throws Exception {
+    public void testAirportsWithNullURL() throws Exception {
         this.mockmvc.perform(get(null).accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void testAirportshWithInvalidMediaType() throws Exception {
+    public void testAirportsWithInvalidMediaType() throws Exception {
         this.mockmvc.perform(get("/airports").accept(MediaType.parseMediaType("text/plain")))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test(expected = InvalidMediaTypeException.class)
-    public void testAirportshWithNullMediaType() throws Exception {
+    public void testAirportsWithNullMediaType() throws Exception {
         this.mockmvc.perform(get("/airports").accept(MediaType.parseMediaType(null)));
     }
 
     @Test
-    public void testAirportshCorrectly() throws Exception {
+    public void testAirportsCorrectly() throws Exception {
         //test everything is alright / correct url, correct media type to accept, correct content type
         this.mockmvc.perform(get("/airports").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
@@ -132,7 +133,7 @@ public class SiteControllerTest {
     }
 
     @Test
-    public void testsearchWithInvalidMediaType() throws Exception {
+    public void testSearchWithInvalidMediaType() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         this.mockmvc.perform(get("/flights?from=HMO&to=MEX&startDate=" + sdf.format(getDate(1)) + "&endDate=" +
                 sdf.format(getDate(2)) + "&type=oneWay").accept(MediaType.parseMediaType("text/plain")))
@@ -160,8 +161,48 @@ public class SiteControllerTest {
         //and tell us that whether the answer can be empty or not it is a JSON string anyway
     }
 
+    //
+    @Test
+    public void testStoreFlightWithInvalidURL() throws Exception {
+        this.mockmvc.perform(get("storeFlight").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+
+        this.mockmvc.perform(get("dfisjfoidfj").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStoreFlightWithNullURL() throws Exception {
+        this.mockmvc.perform(get(null).accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testStoreFlightWithInvalidMediaType() throws Exception {
+        this.mockmvc.perform(get("/storeFlight").accept(MediaType.parseMediaType("text/plain")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test(expected = InvalidMediaTypeException.class)
+    public void testStoreFlightWithNullMediaType() throws Exception {
+        this.mockmvc.perform(get("/storeFlight").accept(MediaType.parseMediaType(null)));
+    }
+
+    @Ignore
+    public void testStoreFlightCorrectly() throws Exception {
+        //test everything is alright / correct url, correct media type to accept, correct content type
+        this.mockmvc.perform(get("/storeFlight").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+
+        this.mockmvc.perform(get("/storeFlight/").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+    }
+
     /**
      * Gets a date given the lap
+     *
      * @param lap the lap of time to consider to create a date; 1 for a week, 2 for a day and a week
      * @return a date object with tha represents a date in the future
      */
@@ -170,11 +211,12 @@ public class SiteControllerTest {
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
         switch (lap) {
-            case 1 :
+
+            case 1:
                 //in one week
                 cal.add(Calendar.WEEK_OF_YEAR, 1);
                 break;
-            case 2 :
+            case 2:
                 //tomorrow plus 1 week
                 cal.add(Calendar.WEEK_OF_YEAR, 1);
                 cal.add(Calendar.DAY_OF_YEAR, 1);
@@ -184,5 +226,4 @@ public class SiteControllerTest {
         }
         return cal.getTime();
     }
-
 }
