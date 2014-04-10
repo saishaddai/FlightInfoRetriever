@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FlightDAO {
 
-    Flight findById(Integer id);
+    Flight findById(Long id);
     List<Flight> findAll();
     boolean createFlight(Flight flight);
     boolean updateFlight(Flight flight);
