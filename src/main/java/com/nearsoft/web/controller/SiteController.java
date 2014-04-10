@@ -3,6 +3,7 @@ package com.nearsoft.web.controller;
 import com.nearsoft.bean.Flight;
 import com.nearsoft.service.APIService;
 import com.nearsoft.service.AirportService;
+import com.nearsoft.service.FlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 @Controller
 public class SiteController {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
     @Autowired
     private APIService apiService;
@@ -26,16 +27,19 @@ public class SiteController {
     @Autowired
     private AirportService airportService;
 
+    @Autowired
+    private FlightService flightService;
+
     /**
      * Redirects to the landing page
      * @return the index.jsp of the landing page
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
+        logger.debug("welcome method");
         //airportService.getAirports();
         return "index";
     }
-
 
     /**
      * Gets a list of all the airports. The list came from a database and it changes almost any
@@ -44,6 +48,7 @@ public class SiteController {
     @RequestMapping(value = "/airports", method = RequestMethod.GET)
     @ResponseBody
     public List<String> airports() {
+        logger.debug("airports method");
         return airportService.getAirports();
     }
 
@@ -64,12 +69,26 @@ public class SiteController {
                                @RequestParam("startDate") String startDate,
                                @RequestParam("endDate") String endDate,
                                @RequestParam("type") String type) {
-
+        logger.debug("search method");
         if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
+            logger.warn("some arguments are missing");
             return new ArrayList<>();
         } else {
+            logger.debug("search method ended successfully");
             return (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
         }
+    }
+
+    /**
+     * Saves a flight in database
+     *
+     * @param flight a flight object to store
+     * @return true if the process ended satisfactory
+     */
+    @RequestMapping(value = "/saveFlight", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean storeFlight(@RequestParam("flight") Flight flight) {
+        return flightService.saveFlight(flight);
     }
 
 }
