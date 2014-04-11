@@ -9,3 +9,5 @@ CREATE TABLE airports (
 
 
 ALTER TABLE public.airports OWNER TO postgres;
+ALTER TABLE ONLY airports
+ADD CONSTRAINT airports_pkey PRIMARY KEY (id);
