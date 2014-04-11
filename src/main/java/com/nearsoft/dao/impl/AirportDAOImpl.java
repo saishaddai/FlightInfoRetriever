@@ -25,7 +25,7 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
     }
 
     @Override
-    protected Class<Airport> getEntityClasss() {
+    protected Class<Airport> getEntityClass() {
         return Airport.class;
     }
 
@@ -46,13 +46,13 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
 
     @Override
     public List<Airport> autoComplete(String part) {
-        String preffixSuffix = "%" + part + "%";
+        String prefixSuffix = "%" + part + "%";
         Disjunction or = Restrictions.disjunction();
-        or.add(Restrictions.ilike("name", preffixSuffix, MatchMode.ANYWHERE));
-        or.add(Restrictions.ilike("iataCode", preffixSuffix, MatchMode.ANYWHERE));
-        or.add(Restrictions.ilike("country", preffixSuffix, MatchMode.ANYWHERE));
-        or.add(Restrictions.ilike("isoCountry", preffixSuffix, MatchMode.ANYWHERE));
-        or.add(Restrictions.ilike("city", preffixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("name", prefixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("iataCode", prefixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("country", prefixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("isoCountry", prefixSuffix, MatchMode.ANYWHERE));
+        or.add(Restrictions.ilike("city", prefixSuffix, MatchMode.ANYWHERE));
         return findByCriteria(true, or);
     }
 }

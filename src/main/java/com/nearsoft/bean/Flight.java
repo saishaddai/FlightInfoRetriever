@@ -1,7 +1,6 @@
 package com.nearsoft.bean;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -14,7 +13,7 @@ import java.io.Serializable;
 @Table(name="flights")
 public class Flight implements Serializable {
 
-    @JsonIgnore
+    //@JsonIgnore
     @Id
     @GeneratedValue
     private Long id;
@@ -35,9 +34,9 @@ public class Flight implements Serializable {
     private String estimateTimeTravel;
     @NotBlank @Column(updatable=false)
     private String airports;
-    @NotBlank @Column(updatable=false)
+    @Column(updatable = false)
     private String stops;
-    @NotBlank @Column(updatable=false)
+    @Column(updatable = false)
     private String scales;
     @NotBlank @Column(updatable=true)
     private boolean booked=false;
@@ -51,6 +50,7 @@ public class Flight implements Serializable {
      * Creates an instance of a flight object
      * @param id unique identifier for a flight
      * @param price the price of the flight commonly on dollars
+     * @param type The type of the flight (one Way or round trip)
      * @param estimateDate1 the date and hour of departure
      * @param estimateDate2 the date and hour of arrival (in a round trip this represents the departure time of return flight)
      * @param companies the airlines involved in the flight
@@ -60,10 +60,11 @@ public class Flight implements Serializable {
      * @param scales a description of the stops as convenient of the API interest
      * @param booked true if the flights has benn taken for an user
      */
-    public Flight(Long id, String price, String estimateDate1, String estimateDate2, String companies,
+    public Flight(Long id, String price, String type, String estimateDate1, String estimateDate2, String companies,
                   String estimateTimeTravel, String airports, String stops, String scales, boolean booked) {
         this.id= id;
         this.price = price;
+        this.type = type;
         this.estimateDate1 = estimateDate1;
         this.estimateDate2 = estimateDate2;
         this.companies = companies;

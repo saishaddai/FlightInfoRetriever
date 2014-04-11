@@ -2,7 +2,6 @@ package com.nearsoft.web.controller;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ import java.util.Date;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Created by slopez on 2/28/14.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration({"classpath:mvc-dispatcher-servlet-test.xml", "classpath:applicationContext.xml"})
@@ -161,10 +157,11 @@ public class SiteControllerTest {
         //and tell us that whether the answer can be empty or not it is a JSON string anyway
     }
 
-    //
+
+    //store flight test
     @Test
     public void testStoreFlightWithInvalidURL() throws Exception {
-        this.mockmvc.perform(get("storeFlight").accept(MediaType.parseMediaType("application/json")))
+        this.mockmvc.perform(get("/saveFlight").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().is4xxClientError());
 
         this.mockmvc.perform(get("dfisjfoidfj").accept(MediaType.parseMediaType("application/json")))
@@ -179,23 +176,65 @@ public class SiteControllerTest {
 
     @Test
     public void testStoreFlightWithInvalidMediaType() throws Exception {
-        this.mockmvc.perform(get("/storeFlight").accept(MediaType.parseMediaType("text/plain")))
+        this.mockmvc.perform(get("/saveFlightt").accept(MediaType.parseMediaType("text/plain")))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test(expected = InvalidMediaTypeException.class)
     public void testStoreFlightWithNullMediaType() throws Exception {
-        this.mockmvc.perform(get("/storeFlight").accept(MediaType.parseMediaType(null)));
+        this.mockmvc.perform(get("/saveFlight").accept(MediaType.parseMediaType(null)));
     }
 
-    @Ignore
+    @Test
     public void testStoreFlightCorrectly() throws Exception {
         //test everything is alright / correct url, correct media type to accept, correct content type
-        this.mockmvc.perform(get("/storeFlight").accept(MediaType.parseMediaType("application/json")))
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String query = "/saveFlight?price=100&type=oneWay&estimatedDate1=" + sdf.format(getDate(1)) + "&estimatedDate2=" +
+                sdf.format(getDate(2)) + "&companies=Aeromajico&estimateTimeTravel=3h20M&airports=HMO,MEX&stops=non-stop&scales=";
+        this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        this.mockmvc.perform(get("/storeFlight/").accept(MediaType.parseMediaType("application/json")))
+        this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+    }
+
+    //get booked flights
+    @Test
+    public void testGetBookedFlightsWithInvalidURL() throws Exception {
+        this.mockmvc.perform(get("/bookedFlights").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+
+        this.mockmvc.perform(get("dfisjfoidfj").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetBookedFlightsWithNullURL() throws Exception {
+        this.mockmvc.perform(get(null).accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testGetBookedFlightsWithInvalidMediaType() throws Exception {
+        this.mockmvc.perform(get("/bookedFlights").accept(MediaType.parseMediaType("text/plain")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test(expected = InvalidMediaTypeException.class)
+    public void testGetBookedFlightsWithNullMediaType() throws Exception {
+        this.mockmvc.perform(get("/bookedFlights").accept(MediaType.parseMediaType(null)));
+    }
+
+    @Test
+    public void testGetBookedFlightsCorrectly() throws Exception {
+        //test everything is alright / correct url, correct media type to accept, correct content type
+        this.mockmvc.perform(get("/bookedFlights").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+
+        this.mockmvc.perform(get("/bookedFlights/").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
     }

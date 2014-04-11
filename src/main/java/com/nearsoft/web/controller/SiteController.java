@@ -4,6 +4,7 @@ import com.nearsoft.bean.Flight;
 import com.nearsoft.service.APIService;
 import com.nearsoft.service.AirportService;
 import com.nearsoft.service.FlightService;
+import com.nearsoft.service.impl.MockAPIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class SiteController {
 
     @Autowired
     private APIService apiService;
+    private APIService mockApiService;
 
     @Autowired
     private AirportService airportService;
@@ -70,25 +72,61 @@ public class SiteController {
                                @RequestParam("endDate") String endDate,
                                @RequestParam("type") String type) {
         logger.debug("search method");
+        List<Flight> results = null;
         if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
             logger.warn("some arguments are missing");
             return new ArrayList<>();
         } else {
             logger.debug("search method ended successfully");
-            return (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
+            results = (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
+            if (results == null) {
+                //get mockAPI get results
+                mockApiService = new MockAPIService();
+                results = (List<Flight>) mockApiService.getFlights(from, to, startDate, endDate, 0, 0, type);
+            }
+            return results;
         }
     }
 
     /**
      * Saves a flight in database
-     *
-     * @param flight a flight object to store
-     * @return true if the process ended satisfactory
+     * @param price the price of the flight
+     * @param type the type of type (one way or round trip)
+     * @param estimatedDate1 the date of departure
+     * @param estimatedDate2 the date of arriving
+     * @param companies the companies involved in the flight
+     * @param estimateTimeTravel estimated time of travel in days, hours ans minutes
+     * @param airports the airports involved in the flight
+     * @param stops the number of stops of the whole trip
+     * @param scales the number os scales of the whole trip
+     * @return true if the process end successfully, false otherwise
      */
     @RequestMapping(value = "/saveFlight", method = RequestMethod.GET)
     @ResponseBody
-    public boolean storeFlight(@RequestParam("flight") Flight flight) {
-        return flightService.saveFlight(flight);
+    public boolean storeFlight(@RequestParam("price") String price,
+                               @RequestParam("type") String type,
+                               @RequestParam("estimatedDate1") String estimatedDate1,
+                               @RequestParam("estimatedDate2") String estimatedDate2,
+                               @RequestParam("companies") String companies,
+                               @RequestParam("estimateTimeTravel") String estimateTimeTravel,
+                               @RequestParam("airports") String airports,
+                               @RequestParam("stops") String stops,
+                               @RequestParam("scales") String scales
+    ) {
+        return flightService.saveFlight(new Flight(0L, price, type, estimatedDate1, estimatedDate2, companies, estimateTimeTravel, airports, stops, scales, true));
+    }
+
+
+    /**
+     * Gets a list of all the booked flights.
+     *
+     * @return a list of flights booked in database
+     */
+    @RequestMapping(value = "/bookedFlights", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Flight> bookedFlights() {
+        logger.debug("booked flights method");
+        return flightService.getBookedFlights();
     }
 
 }

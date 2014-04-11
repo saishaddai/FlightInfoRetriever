@@ -5,6 +5,9 @@ import com.nearsoft.dao.FlightDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Saidel Lopez on 3/28/14.
  * Airport service to get all the airports and fill the auto-complete dynamic lists
@@ -29,6 +32,22 @@ public class FlightService {
         } catch (Exception e) {
         }
         return result;
+    }
+
+    /**
+     * get a List of booked Flights
+     *
+     * @param options filter options, none is used in this implementation
+     * @return a list of airports as strings (which is, no model objects)
+     */
+    public List<Flight> getBookedFlights(Object... options) {
+        List<Flight> bookedFlights = new ArrayList<>();
+        try {
+            bookedFlights = flightDAO.findAll();
+        } catch (Exception e) {
+            return bookedFlights;
+        }
+        return bookedFlights;
     }
 
 }

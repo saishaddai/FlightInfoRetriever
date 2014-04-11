@@ -6,17 +6,24 @@ import com.nearsoft.persistence.BaseHibernateDAO;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
-public class FlightDAOImpl extends BaseHibernateDAO<Flight, Integer> implements FlightDAO {
+@Transactional
+public class FlightDAOImpl extends BaseHibernateDAO<Flight, Long> implements FlightDAO {
+
+
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    private SessionFactory sessionFactory;
+    public FlightDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
-    protected Class<Flight> getEntityClasss() {
+    protected Class<Flight> getEntityClass() {
         return Flight.class;
     }
 
@@ -26,7 +33,7 @@ public class FlightDAOImpl extends BaseHibernateDAO<Flight, Integer> implements 
     }
 
     @Override
-    public Flight findById(Integer id) {
+    public Flight findById(Long id) {
         return find(id);
     }
 

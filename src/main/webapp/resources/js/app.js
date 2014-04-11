@@ -1,67 +1,77 @@
-App = Ember.Application.create();
-
-App.Router.map(function() {
+App = Ember.Application.create({
+    LOG_TRANSITIONS: true
 });
 
-App.SearchParameters = Ember.Route.extend({
-    fromV : "",
-    toV : "",
-    startDateV : "",
-    endDateV : "",
-    typeV : ""
+App.Router.map(function () {
 });
 
-App.IndexRoute = Ember.Route.extend({
-    model: function(){
-        return App.SearchParameters.create(null)
+App.FlightsRoute = Ember.Route.extend({
+    model: function () {
+        return App.FLIGHTS;
+    }
+});
+
+App.IndexController = Ember.Controller.extend({
+    availableAirports: function () {
+        $.getJSON("/airports").then(function (data) {
+            return data;
+        });
+    }.property(),
+    startAutocomplete: function () {
+        $("#sourceFlight").autocomplete({
+            source: this.availableAirports,
+            minLength: 3
+        });
+        $("#destinyFlight").autocomplete({
+            source: this.availableAirports,
+            minLength: 3
+        });
+    }
+})
+
+App.FLIGHTS = [
+    {
+        price: 7,
+        type: "trip",
+        estimateDate1: new Date(),
+        estimateDate2: new Date(),
+        companies: "",
+        estimateTimeTravel: "5 hours",
+        airports: "",
+        stops: "",
+        scales: ""
     },
-    setupController : function(controller, model){
-        controller.set("model", model);
+    {
+        price: 8,
+        type: "trip",
+        estimateDate1: new Date(),
+        estimateDate2: new Date(),
+        companies: "",
+        estimateTimeTravel: "5 hours",
+        airports: "",
+        stops: "",
+        scales: ""
+    },
+    {
+        price: 9,
+        type: "trip",
+        estimateDate1: new Date(),
+        estimateDate2: new Date(),
+        companies: "",
+        estimateTimeTravel: "5 hours",
+        airports: "",
+        stops: "",
+        scales: ""
+    },
+    {
+        price: 10,
+        type: "trip",
+        estimateDate1: new Date(),
+        estimateDate2: new Date(),
+        companies: "",
+        estimateTimeTravel: "5 hours",
+        airports: "",
+        stops: "",
+        scales: ""
     }
-});
-
-App.IndexController = Ember.ObjectController.extend({
-    availableAirports : [],
-    actions : {//debe ser una funcion autoexecutable
-        start: function() {
-            $.getJSON("/airports").then(function(data) {
-                this.availableAirports = data;
-            });
-            $( "#sourceFlight" ).autocomplete({
-                source: this.availableAirports,
-                minLength: 3
-            });
-            $( "#destinyFlight" ).autocomplete({
-                source: this.availableAirports,
-                minLength: 3
-            });
-
-        }
-    }
-});
-
-App.ApplicationController = Ember.Controller.extend({
-    actions : {
-        oneWay : function() {
-//            $('#oneWay').css('background-color: #cccccc');
-//            $('#roundTrip').removeAttr('style');
-            App.SearchParameters.typeV="oneWay";
-        },
-        roundTrip : function() {
-//            $('#roundTrip').css('background-color: #cccccc');
-//            $('#oneWay').removeAttr('style');
-            App.SearchParameters.typeV="roundTrip";
-        },
-        submitAction : function(){
-            var query = "/flights?from=";
-            query += "" + App.SearchParameters.fromV + "&to=";//add from
-            query += "" + App.SearchParameters.toV + "&startDate=";//add to
-            query += "" + App.SearchParameters.startDateV + "&endDate=";//add startDate
-            query += "" + App.SearchParameters.endDateV + "&type=";//add endDate
-            query += App.SearchParameters.typeV + "";//add type
-            return $.getJSON(query).then(function(data) {
-                return data;
-            });
-        }
-    }
-});
+]

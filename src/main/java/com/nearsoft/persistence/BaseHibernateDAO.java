@@ -1,18 +1,19 @@
 package com.nearsoft.persistence;
 
-import java.io.Serializable;
-import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
+import java.io.Serializable;
+import java.util.List;
+
 @SuppressWarnings("unchecked")
 public abstract class BaseHibernateDAO<T, K extends Serializable> {
 
-    private final Class<T> entityClasss = getEntityClasss();
+    private final Class<T> entityClass = getEntityClass();
 
-    protected abstract Class<T> getEntityClasss();
+    protected abstract Class<T> getEntityClass();
 
     protected abstract SessionFactory getSessionFactory();
 
@@ -21,7 +22,7 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
     }
 
     protected T find(K id) {
-        return (T) getCurrentSession().get(entityClasss, id);
+        return (T) getCurrentSession().get(getEntityClass(), id);
     }
 
     protected List<T> find() {
@@ -41,7 +42,7 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
     }
 
     protected Criteria createCriteria(boolean cacheable, Criterion... criterion) {
-        Criteria criteria = getCurrentSession().createCriteria(entityClasss);
+        Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
         for (Criterion criterionItem : criterion) {
             criteria.add(criterionItem);
         }
