@@ -35,7 +35,20 @@
     font-family: Arial;
 }
 
-.optionConf:hover {
+.optionRemove {
+    width: 99px;
+    border: 0 solid gray;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 12px;
+    background-color: lightgray;
+    font-size: 13px;
+    font-family: Arial;
+    margin-right: 15px;
+}
+
+.active, .optionConf:hover, .optionRemove:hover {
     background-color: #cccccc;
     cursor: pointer;
 }
