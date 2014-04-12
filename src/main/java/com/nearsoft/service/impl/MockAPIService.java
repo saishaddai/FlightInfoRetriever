@@ -44,7 +44,7 @@ public class MockAPIService implements APIService {
         List<Flight> results = new ArrayList<>();
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         for (int i = 0; i < 10; i++) {
-            results.add(new Flight((long) i, i * 100 + "", (String) options[6], (String) options[2], (String) options[3], "Fake Airlines", "2h 00M", options[0] + ", " + options[1], "non-stop", "", false));
+            results.add(new Flight((long) i, i * 100 + "", (String) options[6], (String) options[2], (String) options[3], "Aeromajico, Air Manada", "2h 00M", options[0] + ", " + options[1], "non-stop", "", false));
         }
         return results;
 
