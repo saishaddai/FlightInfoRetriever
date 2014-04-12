@@ -239,6 +239,42 @@ public class SiteControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
     }
 
+    //remove booked flights
+    @Test
+    public void testRemoveBookedFlightWithInvalidURL() throws Exception {
+        this.mockmvc.perform(get("/removeBookedFlight").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+
+        this.mockmvc.perform(get("dfisjfoidfj").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveBookedFlightWithNullURL() throws Exception {
+        this.mockmvc.perform(get(null).accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testRemoveBookedFlightWithInvalidMediaType() throws Exception {
+        this.mockmvc.perform(get("/removeBookedFlight").accept(MediaType.parseMediaType("text/plain")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test(expected = InvalidMediaTypeException.class)
+    public void testRemoveBookedFlightWithNullMediaType() throws Exception {
+        this.mockmvc.perform(get("/removeBookedFlight").accept(MediaType.parseMediaType(null)));
+    }
+
+    @Test
+    public void testRemoveBookedFlightCorrectly() throws Exception {
+        //test everything is alright / correct url, correct media type to accept, correct content type
+        this.mockmvc.perform(get("/removeBookedFlight?id=1").accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+
+    }
+
     /**
      * Gets a date given the lap
      *
