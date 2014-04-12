@@ -50,4 +50,20 @@ public class FlightService {
         return bookedFlights;
     }
 
+    /**
+     * Remove a booked Flight
+     *
+     * @param options option[0] the identifier for a booked flight
+     * @return true if process ended well
+     */
+    public boolean removeBookedFlight(Object... options) {
+        boolean result = false;
+        try {
+            flightDAO.deleteFlight(flightDAO.findById((Long) options[0]));
+        } catch (Exception e) {
+            return result;
+        }
+        return result;
+    }
+
 }
