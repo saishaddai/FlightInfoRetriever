@@ -129,6 +129,19 @@ public class SiteController {
         return flightService.getBookedFlights();
     }
 
+
+    /**
+     * Removes a booked flight.
+     *
+     * @return a list of flights booked in database
+     */
+    @RequestMapping(value = "/removeBookedFlight", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Flight> removeBookedFlight(@RequestParam("id") Long id) {
+        logger.debug("remove booked flight method");
+        flightService.removeBookedFlight(id);//i don't care the result anyway
+        return flightService.getBookedFlights();
+    }
 }
 
 
