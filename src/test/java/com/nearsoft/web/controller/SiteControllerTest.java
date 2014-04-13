@@ -195,9 +195,6 @@ public class SiteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"));
     }
 
     //get booked flights
