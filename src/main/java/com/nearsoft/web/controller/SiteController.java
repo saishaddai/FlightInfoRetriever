@@ -73,11 +73,10 @@ public class SiteController {
                                @RequestParam("type") String type) {
         logger.debug("search method");
         List<Flight> results = null;
-        if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
-            logger.warn("some arguments are missing");
-            return new ArrayList<>();
-        } else {
+        if (validate(from, to, startDate, endDate, type)) {
             logger.debug("search method ended successfully");
+            from = from.toUpperCase(); //in case it does not come as we want it
+            to = to.toUpperCase(); //in case it does not come as we want it
             results = (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
             if (results == null) {
                 //get mockAPI get results
@@ -85,6 +84,9 @@ public class SiteController {
                 results = (List<Flight>) mockApiService.getFlights(from, to, startDate, endDate, 0, 0, type);
             }
             return results;
+        } else {
+            logger.warn("some arguments are missing");
+            return new ArrayList<>();
         }
     }
 
@@ -141,6 +143,25 @@ public class SiteController {
         logger.debug("remove booked flight method");
         flightService.removeBookedFlight(id);//i don't care the result anyway
         return flightService.getBookedFlights();
+    }
+
+    /**
+     * Validates the parameters
+     *
+     * @param from      the source of the flight
+     * @param to        the destiny of the flight
+     * @param startDate the date of departure
+     * @param endDate   the date of arriving
+     * @param type      the type of flight ("oneWay", "roundTrip", "multiScale")
+     * @return false if any parameter is empty, true otherwise
+     */
+    private boolean validate(String from, String to, String startDate, String endDate, String type) {
+        if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
+            return false;
+        } else if (from.length() != 3 || to.length() != 3) {
+            return false;
+        }
+        return true;
     }
 }
 
