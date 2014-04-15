@@ -241,7 +241,7 @@ App.FLIGHTS = [
         companies: "airlines",
         estimateTimeTravel: "2H 00M",
         airports: "airports",
-        stops: "non stop",
+        stops: "non-stop",
         scales: ""
     },
     {
