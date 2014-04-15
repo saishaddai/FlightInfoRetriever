@@ -38,7 +38,7 @@ public class Flight implements Serializable {
     private String stops;
     @Column(updatable = false)
     private String scales;
-    @NotBlank @Column(updatable=true)
+    @Column(updatable = true)
     private boolean booked=false;
 
     /**
