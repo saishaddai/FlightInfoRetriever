@@ -43,8 +43,8 @@
                 </div>
                 <div class="config2" >
                 <%-- {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}} --%>
-    <%-- {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}} --%>
-                    <button class="buttonF" {{action "search" this}}>Go</button>
+                    {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}}
+                    <%--<button class="buttonF" {{action "search" this}}>Go</button> --%>
                 </div>
             </div>
         </div>
@@ -53,7 +53,6 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="search">
-<p>im a misfit</p>
     <div class="resultsArea">
         {{#each}}
         <div class="result even">
@@ -75,7 +74,7 @@
             </div>
             <div class="section5">
                 <%--<div class="numbers">{{#link-to 'flights' tagName='button' class='optionRemove' }}Book{{/link-to}}</div>--%>
-                <button class="optionRemove" {{action "storeFlight" this }}>Remove</button>
+                <button class="optionRemove" {{action "storeFlight" this }}>Book</button>
             </div>
         </div>
         {{/each}}
