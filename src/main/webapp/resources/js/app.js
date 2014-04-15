@@ -5,10 +5,7 @@ App = Ember.Application.create({
 ///////////////////////////////////////////////////////// ROUTER ////////////////////////////////////////////////////////
 App.Router.map(function () {
     this.resource('bookedFlights');
-    this.resource('flights');
-    this.route('search');
-    this.route('remove');
-    this.route('book');
+    this.resource('search');
 });
 
 
@@ -62,7 +59,7 @@ App.IndexRoute = Ember.Route.extend({
             console.log('date1c:' + this);
             $.getJSON(query, function (flights) {
                 console.log(flights);
-                App.FLIGHTS = flights; //maybe it must be deleted
+                App.FLIGHTS = flights; //maybe it must be deleted maybe not
                 self.transitionToRoute('search', flights);
             }, function (error) {
                 return error;
@@ -80,6 +77,17 @@ App.BookedFlightsRoute = Ember.Route.extend({
         });
     },
     actions: {
+        search: function (params) {
+            var query = "/flights?from=";
+            query += "" + params.fromV + "&to=";//add from
+            query += "" + params.toV + "&startDate=";//add to
+            query += "" + params.startDateV + "&endDate=";//add startDate
+            query += "" + params.endDateV + "&type=oneWay";//add endDate
+            var self = this.controller;
+            return $.getJSON(query).then(function (data) {
+                self.transitionToRoute('search', data);
+            });
+        },
         removeBookedFlight: function (params) {
             var query = "/removeBookedFlight?id=" + params.id;
             return $.getJSON(query, function (response) {
@@ -87,7 +95,6 @@ App.BookedFlightsRoute = Ember.Route.extend({
                 if (response == 'true') {
                     //TODO do something to remove the element from the model
                     return $.getJSON("/bookedFlights", function (bookedFlights) {
-                        model = bookedFlights;
                         return bookedFlights;
                     });
                 }
@@ -99,28 +106,24 @@ App.BookedFlightsRoute = Ember.Route.extend({
 
 App.SearchRoute = Ember.Route.extend({
     model: function () {
-        alert('search route');
-        //return App.FLIGHTS;
-        return App.SearchResult.create();
+        return App.FLIGHTS;
+        //return App.SearchResult.create();
     },
     setupController: function (controller, model) {
         controller.set("model", model);
-        alert(model);
     },
     actions: {
-        search: function () {
+        search: function (params) {
             var query = "/flights?from=";
-            query += "" + model.fromV + "&to=";//add from
-            query += "" + model.toV + "&startDate=";//add to
-            query += "" + model.startDateV + "&endDate=";//add startDate
-            query += "" + model.endDateV + "&type=";//add endDate
-            query += model.typeV + "";//add type
+            query += "" + params.fromV + "&to=";//add from
+            query += "" + params.toV + "&startDate=";//add to
+            query += "" + params.startDateV + "&endDate=";//add startDate
+            query += "" + params.endDateV + "&type=oneWay";//add endDate
             return $.getJSON(query).then(function (data) {
-                model = data;
                 return data;
             });
         },
-        saveFlight: function (params) {
+        storeFlight: function (params) {
             var query = "/saveFlight?price=" + params.price + "&";
             query += "type=" + params.type + "&";
             query += "estimatedDate1=" + params.estimateDate1 + "&";
@@ -131,10 +134,10 @@ App.SearchRoute = Ember.Route.extend({
             query += "stops=" + params.stops + "&";
             query += "scales=" + params.scales;
             console.log(query);
+            var self = this.controller;
             return $.getJSON(query, function (response) {
                 if (response == 'true') {
-                    //TODO Add the element to the model
-                    //TODO Redirection to the 'bookedFlights' route
+                    self.transitionToRoute('bookedFlights', response);
                 }
                 return response;
             });
@@ -144,13 +147,13 @@ App.SearchRoute = Ember.Route.extend({
 
 
 /////////////////////////////////////////////////// CONTROLLERS /////////////////////////////////////////////////////////
-App.SearchController = Ember.ArrayController.extend({
-});
+//App.SearchController = Ember.ArrayController.extend({
+//});
 
 
 //////////////////////////////////////////////////////////////////// VIEWS //////////////////////////////////////////////
 /**
- * view for datepicker in the destiny input html
+ * view for date picker in the destiny input html
  * @type {void|*}
  */
 App.Date1View = Ember.TextField.extend({
@@ -177,7 +180,6 @@ App.AutoCompleteSourceView = Ember.TextField.extend({
     didInsertElement: function () {
         var availableAirports = function () {
             return $.getJSON("/airports", function (airports) {
-                console.log(airports);
                 return airports;
             });
         };
@@ -200,7 +202,6 @@ App.AutoCompleteDestinyView = Ember.TextField.extend({
     didInsertElement: function () {
         var availableAirports = function () {
             return $.getJSON("/airports", function (airports) {
-                console.log(airports);
                 return airports;
             });
         };
@@ -228,12 +229,15 @@ Ember.Handlebars.helper('format-date', function (date) {
  * FIXTURES
  * @type {{price: number, type: string, estimateDate1: Date, estimateDate2: Date, companies: string, estimateTimeTravel: string, airports: string, stops: string, scales: string}[]}
  */
+var today = new Date();
+var simple = "2013-12-12";
+var ending = "2014-08-12";
 App.FLIGHTS = [
     {
         price: 450,
         type: "oneWay",
-        estimateDate1: new Date(),
-        estimateDate2: new Date(),
+        estimateDate1: simple,
+        estimateDate2: ending,
         companies: "airlines",
         estimateTimeTravel: "2H 00M",
         airports: "airports",
@@ -243,8 +247,8 @@ App.FLIGHTS = [
     {
         price: 390,
         type: "oneWay",
-        estimateDate1: new Date(),
-        estimateDate2: new Date(),
+        estimateDate1: simple,
+        estimateDate2: ending,
         companies: "airlines",
         estimateTimeTravel: "4H 30M",
         airports: "airports",
@@ -254,8 +258,8 @@ App.FLIGHTS = [
     {
         price: 400,
         type: "oneWay",
-        estimateDate1: new Date(),
-        estimateDate2: new Date(),
+        estimateDate1: simple,
+        estimateDate2: ending,
         companies: "airlines",
         estimateTimeTravel: "4H 50M",
         airports: "airports",
@@ -265,8 +269,8 @@ App.FLIGHTS = [
     {
         price: 300,
         type: "oneWay",
-        estimateDate1: new Date(),
-        estimateDate2: new Date(),
+        estimateDate1: simple,
+        estimateDate2: ending,
         companies: "airlines",
         estimateTimeTravel: "5H 00M",
         airports: "airports",
