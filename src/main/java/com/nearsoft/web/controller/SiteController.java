@@ -156,7 +156,7 @@ public class SiteController {
      * @return false if any parameter is empty, true otherwise
      */
     private boolean validate(String from, String to, String startDate, String endDate, String type) {
-        if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || endDate.isEmpty() || type.isEmpty()) {
+        if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
             return false;
         } else if (from.length() != 3 || to.length() != 3) {
             return false;
