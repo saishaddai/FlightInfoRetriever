@@ -28,8 +28,9 @@ public class FlightService {
     public boolean saveFlight(Flight flight, Object... options) {
         boolean result = false;
         try {
-            result = flightDAO.findById(flight.getId()) != null ? flightDAO.createFlight(flight) : flightDAO.updateFlight(flight);
+            result = flightDAO.createFlight(flight);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }
