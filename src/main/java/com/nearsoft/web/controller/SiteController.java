@@ -45,13 +45,17 @@ public class SiteController {
 
     /**
      * Gets a list of all the airports. The list came from a database and it changes almost any
+     *
+     * @param startsWith a part of the string to look for among airports
+     * @param maxRows the approximate number of expected results, it is usually bigger
      * @return a list of strings, each one with a textual name and description of an airport
      */
     @RequestMapping(value = "/airports", method = RequestMethod.GET)
     @ResponseBody
-    public List<String> airports() {
+    public List<String> airports(@RequestParam(value = "startsWith", required = false, defaultValue = "") String startsWith,
+                                 @RequestParam(value = "maxRows", required = false, defaultValue = "10") int maxRows) {
         logger.debug("airports method");
-        return airportService.getAirports();
+        return airportService.getAirports(startsWith, maxRows);
     }
 
     /**
@@ -159,6 +163,8 @@ public class SiteController {
         if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
             return false;
         } else if (from.length() != 3 || to.length() != 3) {
+            return false;
+        } else if (from.equalsIgnoreCase(to)) {
             return false;
         }
         return true;
