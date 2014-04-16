@@ -8,14 +8,21 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by slopez on 3/11/14.
+ * Created by Saidel Lopez on 3/11/14.
  */
 public class APIConnection {
 
+    /**
+     * Performs API calls through a internet HTTP client
+     *
+     * @param url     the URL to connect to
+     * @param headers optionals headers in the request message
+     * @return an object containing the content in the URL
+     * @throws ConnectException if connection failed
+     */
     public static Object callAPI(String url, Map<String, String> headers) throws ConnectException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
@@ -45,13 +52,4 @@ public class APIConnection {
 
     }
 
-    public static void main(String[] args) {
-        Map<String, String > headers = new HashMap<>();
-        headers.put("X-ApiKey","AG28754");
-        try {
-            APIConnection.callAPI("http://api.despegar.com/availability/flights/oneWay/HMO/LON/2014-05-25/1/0/0", headers);
-        }catch (Exception e) {
-            System.err.println("ERROR ERROR ERROR ERROR ERRRO ERROR ERROR ERROR ERROR ERRRO ERROR ERROR ERROR ERROR ERRRO");
-        }
-    }
 }
