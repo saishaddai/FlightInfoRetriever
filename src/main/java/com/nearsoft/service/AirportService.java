@@ -27,7 +27,11 @@ public class AirportService {
         List<String> airportsAsStrings = new ArrayList<>();
         List<Airport> airports = null;
         try {
-            airports = airportDAO.findAll();
+            if (options != null && !((String) options[0]).isEmpty()) {
+                airports = airportDAO.autoComplete((String) options[0], (int) options[1]);
+            } else {
+                airports = airportDAO.findAll();
+            }
         } catch (Exception e) {}
         for(Airport airport : airports) {
             airportsAsStrings.add(airport.toString());
