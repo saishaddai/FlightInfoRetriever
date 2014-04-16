@@ -27,8 +27,8 @@ public class APIConnection {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
 
-        if(headers != null) {
-            for(String key : headers.keySet()) {
+        if (headers != null) {
+            for (String key : headers.keySet()) {
                 request.setHeader(key, headers.get(key));
             }
         }
@@ -38,7 +38,7 @@ public class APIConnection {
         try {
             response = client.execute(request);
             // Get the response
-            BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String line = "";
             while ((line = rd.readLine()) != null) {
                 textView.append(line);
@@ -47,7 +47,6 @@ public class APIConnection {
             e.printStackTrace();
             throw new ConnectException();
         }
-        System.out.println(textView);
         return textView;
 
     }
