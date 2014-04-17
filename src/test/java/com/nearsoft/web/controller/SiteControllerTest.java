@@ -137,7 +137,7 @@ public class SiteControllerTest {
     }
 
     @Test(expected = InvalidMediaTypeException.class)
-    public void testSearchhWithNullMediaType() throws Exception {
+    public void testSearchWithNullMediaType() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         this.mockmvc.perform(get("/flights?from=HMO&to=MEX&startDate=" + sdf.format(getDate(1)) + "&endDate=" +
                 sdf.format(getDate(2)) + "&type=oneWay").accept(MediaType.parseMediaType(null)));
