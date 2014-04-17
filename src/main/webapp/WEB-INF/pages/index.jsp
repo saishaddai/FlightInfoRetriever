@@ -22,8 +22,6 @@
     {{#link-to 'bookedFlights' tagName='button' class="optionConf"}} My Flights {{/link-to}}
     <div class="configurationArea">
         <div class="topConfiguration">
-            <%--<div class="optionConf"> Round Trip </div>--%>
-    <%-- <div class="optionConf"> One Way </div> --%>
     <%--<button type="button" class="optionConf" id="oneWay" {{action "oneWay"}}>One Way</button>--%>
     <%-- <button type="button" class="optionConf" id="roundTrip" {{action "roundTrip"}}>Round Trip</button> --%>
         </div>
@@ -42,14 +40,13 @@
                     {{input type="text" value=model.date2 disabled=true class="secondDay" id="secondDay"}}
                 </div>
                 <div class="config2" >
-                <%-- {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}} --%>
-    <%-- {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}} --%>
                     <button class="buttonF" {{action "search" this}}>Go</button>
                 </div>
             </div>
         </div>
     </div>
     {{outlet}}
+
 </script>
 
 <script type="text/x-handlebars" data-template-name="search">
@@ -73,12 +70,12 @@
                 <div class="information">{{scales}}</div>
             </div>
             <div class="section5">
-                <%--<div class="numbers">{{#link-to 'flights' tagName='button' class='optionRemove' }}Book{{/link-to}}</div>--%>
                 <button class="optionRemove" {{action "storeFlight" this }}>Book</button>
             </div>
         </div>
         {{/each}}
     </div>
+
 
 </script>
 
@@ -106,7 +103,6 @@
             </div>
             <div class="section5">
                 <div class="numbers">
-                    <%--{{#link-to 'remove' this tagName='button' class='optionRemove' }}Remove{{/link-to}} --%>
                     <button class="optionRemove" {{action "removeBookedFlight" this }}>Remove</button>
 
                 </div>
@@ -114,6 +110,7 @@
         </div>
         {{/each}}
     </div>
+
 
 
 </script>
