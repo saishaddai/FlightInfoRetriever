@@ -18,7 +18,7 @@
 <body>
 
 <script type="text/x-handlebars" data-template-name="application">
-    {{#link-to 'index' tagName='button' class="optionConf" }} Search {{/link-to}}
+    {{#link-to 'search' tagName='button' class="optionConf" }} Search {{/link-to}}
     {{#link-to 'bookedFlights' tagName='button' class="optionConf"}} My Flights {{/link-to}}
     <div class="configurationArea">
         <div class="topConfiguration">
@@ -30,21 +30,21 @@
         <div class="middleConfiguration" >
             <div class="daForm" >
                 <div class="config1">
-                    {{view App.AutoCompleteSourceView}}
+                    {{view App.AutoCompleteSourceView value=model.fromV}}
                     <%-- {{input type="text"  value=model.fromV  name="sourceFlight" id="sourceFlight" class="input" size="31" maxlength="255" }} &nbsp; --%>
 
-                    {{view App.AutoCompleteDestinyView}}
+                    {{view App.AutoCompleteDestinyView value=model.toV}}
                     <%--{{input type="text"  value=model.toV  class="input toLeft" name="destinyFlight" id="destinyFlight" size="31" maxlength="255" }}&nbsp;--%>
 
-                    {{view App.Date1View}}
-                    <%-- must be attached to model.date1 {{input type="text" value=model.date1 class="firstDay" id="firstDay"}}--%>
+                    {{view App.Date1View value=model.date1}}
+                    <%-- {{input type="text" value=model.date1 class="firstDay" id="firstDay"}}--%>
 
                     {{input type="text" value=model.date2 disabled=true class="secondDay" id="secondDay"}}
                 </div>
                 <div class="config2" >
                 <%-- {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}} --%>
-                    {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}}
-                    <%--<button class="buttonF" {{action "search" this}}>Go</button> --%>
+    <%-- {{#link-to 'search' class="buttonF" tagName="button"}}Go{{/link-to}} --%>
+                    <button class="buttonF" {{action "search" this}}>Go</button>
                 </div>
             </div>
         </div>
