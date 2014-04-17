@@ -60,7 +60,7 @@ public class SiteControllerTest {
     }
 
     @Test(expected = InvalidMediaTypeException.class)
-    public void testWelcomehWithNullMediaType() throws Exception {
+    public void testWelcomeWithNullMediaType() throws Exception {
         this.mockmvc.perform(get("/").accept(MediaType.parseMediaType(null)));
     }
 
