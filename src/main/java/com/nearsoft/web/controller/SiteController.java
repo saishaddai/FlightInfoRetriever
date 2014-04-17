@@ -39,7 +39,6 @@ public class SiteController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
         logger.debug("welcome method");
-        //airportService.getAirports();
         return "index";
     }
 
@@ -117,8 +116,7 @@ public class SiteController {
                                @RequestParam("estimateTimeTravel") String estimateTimeTravel,
                                @RequestParam("airports") String airports,
                                @RequestParam("stops") String stops,
-                               @RequestParam("scales") String scales
-    ) {
+                               @RequestParam("scales") String scales) {
         return flightService.saveFlight(new Flight(0L, price, type, estimatedDate1, estimatedDate2, companies, estimateTimeTravel, airports, stops, scales, true));
     }
 
