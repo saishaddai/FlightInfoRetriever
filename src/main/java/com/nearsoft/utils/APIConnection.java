@@ -10,9 +10,6 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.util.Map;
 
-/**
- * Created by Saidel Lopez on 3/11/14.
- */
 public class APIConnection {
 
     /**
@@ -23,10 +20,12 @@ public class APIConnection {
      * @return an object containing the content in the URL
      * @throws ConnectException if connection failed
      */
-    public static Object callAPI(String url, Map<String, String> headers) throws ConnectException {
+    public static String callAPI(String url, Map<String, String> headers) throws ConnectException {
+        if (url == null) {
+            throw new ConnectException("invalid URL");
+        }
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
-
         if (headers != null) {
             for (String key : headers.keySet()) {
                 request.setHeader(key, headers.get(key));
@@ -39,15 +38,14 @@ public class APIConnection {
             response = client.execute(request);
             // Get the response
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String line = "";
+            String line;
             while ((line = rd.readLine()) != null) {
                 textView.append(line);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ConnectException();
         }
-        return textView;
+        return textView.toString();
 
     }
 
