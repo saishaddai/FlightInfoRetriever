@@ -1,92 +1,83 @@
 package com.nearsoft.service;
 
+import com.nearsoft.bean.Airport;
+import com.nearsoft.dao.AirportDAO;
+import com.nearsoft.dao.impl.AirportDAOImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 /**
- * Created by slopez on 3/31/14.
+ * Created by Saidel Lopez on 3/31/14.
+ * Class to test all the airports data access object features
  */
 public class AirportServiceTest {
 
     AirportService airportService;
+    AirportDAO airportDAO;
 
     @Before
     public void setUp() throws Exception {
-        airportService = createNiceMock(AirportService.class);
+        airportDAO = createStrictMock(AirportDAOImpl.class);
+        airportService = new AirportService(airportDAO);
     }
 
     @After
     public void tearDown() throws Exception {
-        airportService = null;
-    }
-
-    @Test
-    public void testGetAirportsAndListIsEmpty()  {
-        List<String> emptyAirports = new ArrayList<>();
-        List<String> results = null;
-        expect(airportService.getAirports()).andReturn(emptyAirports).once();
-        replay(airportService);
-        results=airportService.getAirports();
-        assertTrue(0 == results.size());
-        verify(airportService);
+        airportDAO = null;
     }
 
 
     @Test
-    public void testGetAirportsAndListIsNull()  {
-        List<String> nullAirports = null;
-        List<String> results = null;
-        expect(airportService.getAirports()).andReturn(nullAirports).once();
-        replay(airportService);
-        results=airportService.getAirports();
-        assertNull(results);
-        assertEquals(results, nullAirports);
-        verify(airportService);
+    public void testAirportsWithException() {
+        expect(airportDAO.findAll()).andThrow(new IllegalArgumentException()).once();
+        expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andThrow(new IllegalArgumentException()).once();
+        replay(airportDAO);
+        List<String> airports = airportService.getAirports(null, null);
+        assertNotNull(airports);
+        assertTrue(airports.isEmpty());
+        airports = airportService.getAirports("test", 0);
+        assertNotNull(airports);
+        assertTrue(airports.isEmpty());
     }
 
     @Test
-    public void testGetAirportsWithUselessOptionsAndGetValidResponse()  {
-        List<String> validFullAirports = new ArrayList<String>() {
+    public void testGetAirportsAndGetEmptyList() {
+        List<Airport> mockEmptyResult = new ArrayList<>();
+        expect(airportDAO.findAll()).andReturn(mockEmptyResult).once();
+        expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andReturn(mockEmptyResult).once();
+        replay(airportDAO);
+        List<String> airports = airportService.getAirports(null);
+        assertNotNull(airports);
+        assertTrue(airports.isEmpty());
+        airports = airportService.getAirports("test", 0);
+        assertNotNull(airports);
+        assertTrue(airports.isEmpty());
+    }
+
+    @Test
+    public void testGetBookedFlightsAndGetCorrectResponse() {
+        List<Airport> mockAirports = new ArrayList<Airport>() {
             {
-                add("UTK - Utirik Airport - Utirik Island, Marshal Islands");
-                add("WLR - Loring Seaplane Base - Loring, USA");
-                add("NUP - Nunapitchuk Airport - Nunapitchuk, USA");
+                add(new Airport(0L, "test", "TST", "test", "test", "test"));
+                add(new Airport(1L, "test", "TST", "test", "test", "test"));
             }
         };
-        List<String> results = null;
-        expect(airportService.getAirports(anyObject())).andReturn(validFullAirports).once();
-        replay(airportService);
-        results=airportService.getAirports(new Date(), new Long(1L), null, "Hello world");
-        assertNotNull(results);
-        assertTrue(3 == results.size());
-        assertFalse(results.isEmpty());
-        verify(airportService);
-    }
+        expect(airportDAO.findAll()).andReturn(mockAirports).once();
+        expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andReturn(mockAirports).once();
+        replay(airportDAO);
+        List<String> airports = airportService.getAirports(null);
+        assertNotNull(airports);
+        assertFalse(airports.isEmpty());
+        airports = airportService.getAirports("test", 10);
+        assertNotNull(airports);
+        assertFalse(airports.isEmpty());
 
-    @Test
-    public void testGetAirportsCorrectlyAndGetValidResponse()  {
-        List<String> validFullAirports = new ArrayList<String>() {
-            {
-                add("UTK - Utirik Airport - Utirik Island, Marshal Islands");
-                add("WLR - Loring Seaplane Base - Loring, USA");
-                add("NUP - Nunapitchuk Airport - Nunapitchuk, USA");
-            }
-        };
-        List<String> results = null;
-        expect(airportService.getAirports()).andReturn(validFullAirports).once();
-        replay(airportService);
-        results=airportService.getAirports();
-        assertNotNull(results);
-        assertTrue(3 == results.size());
-        assertFalse(results.isEmpty());
-        verify(airportService);
     }
 }
