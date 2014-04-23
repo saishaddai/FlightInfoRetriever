@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -47,7 +46,7 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
 
     @Override
     public List<Airport> autoComplete(String part, int maxRows) {
-        List<Airport> airports = new ArrayList<>();
+        List<Airport> airports;
         String prefixSuffix = "%" + part + "%";
         Disjunction or = Restrictions.disjunction();
 
