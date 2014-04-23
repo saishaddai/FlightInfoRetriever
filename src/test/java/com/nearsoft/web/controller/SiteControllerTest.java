@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -67,9 +69,8 @@ public class SiteControllerTest {
     @Test
     public void testWelcomeCorrectly() throws Exception {
         this.mockmvc.perform(get("/").accept(MediaType.parseMediaType("application/json")))
-                .andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/pages/index-old.jsp"));
+                .andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/pages/index.jsp"));
     }
-
 
     //only method 'airports' with path '/airports'
     @Test
@@ -133,7 +134,7 @@ public class SiteControllerTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         this.mockmvc.perform(get("/flights?from=HMO&to=MEX&startDate=" + sdf.format(getDate(1)) + "&endDate=" +
                 sdf.format(getDate(2)) + "&type=oneWay").accept(MediaType.parseMediaType("text/plain")))
-                .andExpect(status().isOk());
+                .andExpect(status().is4xxClientError());
     }
 
     @Test(expected = InvalidMediaTypeException.class)
@@ -143,6 +144,18 @@ public class SiteControllerTest {
                 sdf.format(getDate(2)) + "&type=oneWay").accept(MediaType.parseMediaType(null)));
     }
 
+    @Test
+    public void testSearchMissingArguments() throws Exception {
+        //test everything is alright / correct url, correct media type to accept, correct content type
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String query = "/flights?from=HMO&to=MEX&startDate=&endDate=" +
+                sdf.format(getDate(2)) + "&type=oneWay";
+        this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk());
+        //you cannot ask for an accurate answer because the results came from API so it must
+        //work for you to ask for the content-type
+        //and tell us that whether the answer can be empty or not it is a JSON string anyway
+    }
 
     @Test
     public void testSearchCorrectly() throws Exception {
@@ -176,7 +189,7 @@ public class SiteControllerTest {
 
     @Test
     public void testStoreFlightWithInvalidMediaType() throws Exception {
-        this.mockmvc.perform(get("/saveFlightt").accept(MediaType.parseMediaType("text/plain")))
+        this.mockmvc.perform(get("/saveFlight").accept(MediaType.parseMediaType("text/plain")))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -201,7 +214,7 @@ public class SiteControllerTest {
     @Test
     public void testGetBookedFlightsWithInvalidURL() throws Exception {
         this.mockmvc.perform(get("/bookedFlights").accept(MediaType.parseMediaType("application/json")))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isOk());
 
         this.mockmvc.perform(get("dfisjfoidfj").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().is4xxClientError());
@@ -271,6 +284,39 @@ public class SiteControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
     }
+
+    //for validate method
+    @Test
+    public void testValidateWithEmptyArguments() throws Exception {
+        siteController = new SiteController();
+        assertFalse(siteController.validateSearchParameters("", "", "", ""));
+        assertFalse(siteController.validateSearchParameters("test", "test", "test", ""));
+        assertFalse(siteController.validateSearchParameters("test", "", "test", "test"));
+        assertFalse(siteController.validateSearchParameters("test", "test", "", "test"));
+        assertFalse(siteController.validateSearchParameters("", "test", "test", "test"));
+    }
+
+    @Test
+    public void testValidateWithWrongSourceAndDestiny() throws Exception {
+        siteController = new SiteController();
+        assertFalse(siteController.validateSearchParameters("test", "test", "test", "test"));
+        assertFalse(siteController.validateSearchParameters("te", "te", "test", "test"));
+        assertFalse(siteController.validateSearchParameters("te", "test", "test", "test"));
+        assertFalse(siteController.validateSearchParameters("test", "te", "test", "test"));
+    }
+
+    @Test
+    public void testValidateWithSameSourceAndDestiny() throws Exception {
+        siteController = new SiteController();
+        assertFalse(siteController.validateSearchParameters("MEX", "MEX", "test", "test"));
+    }
+
+    @Test
+    public void testValidateCorrectly() throws Exception {
+        siteController = new SiteController();
+        assertTrue(siteController.validateSearchParameters("HMO", "MEX", "test", "test"));
+    }
+
 
     /**
      * Gets a date given the lap
