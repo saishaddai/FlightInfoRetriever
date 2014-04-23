@@ -9,21 +9,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title> Live and let Flight </title>
-    <link rel="stylesheet" href="/resources/css/mystyle.css">
+    <link rel="stylesheet" href="/resources/css/style.css">
     <link rel="icon" type="image/x-icon" href="/resources/favicon.ico"/>
     <link rel="stylesheet" href="/resources/js/libs/jquery-ui/css/smoothness/jquery-ui-1.10.4.custom.css">
-
-
 </head>
 <body>
 
 <script type="text/x-handlebars" data-template-name="application">
-    {{#link-to 'search' tagName='button' class="optionConf" }} Search {{/link-to}}
-    {{#link-to 'bookedFlights' tagName='button' class="optionConf"}} My Flights {{/link-to}}
+    {{#link-to 'search' tagName='button' class="optionConf" }} {{i18n indexTemplate.search}} {{/link-to}}
+    {{#link-to 'bookedFlights' tagName='button' class="optionConf"}} {{i18n indexTemplate.bookedFlights}} {{/link-to}}
     <div class="configurationArea">
         <div class="topConfiguration">
-    <%--<button type="button" class="optionConf" id="oneWay" {{action "oneWay"}}>One Way</button>--%>
-    <%-- <button type="button" class="optionConf" id="roundTrip" {{action "roundTrip"}}>Round Trip</button> --%>
         </div>
         <div class="middleConfiguration" >
             <div class="daForm" >
@@ -40,7 +36,7 @@
                     {{input type="text" value=model.date2 disabled=true class="secondDay" id="secondDay"}}
                 </div>
                 <div class="config2" >
-                    <button class="buttonF" {{action "search" this}}>Go</button>
+                    <button class="buttonF" {{action "search" this}}>{{i18n indexTemplate.go}}</button>
                 </div>
             </div>
         </div>
@@ -116,9 +112,15 @@
 </script>
 <script type="text/javascript" src="/resources/js/libs/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="/resources/js/libs/handlebars-1.1.2.js"></script>
+<script type="text/javascript" src="/resources/js/ember-contents/i18n.js"></script>
+<script type="text/javascript" src="/resources/js/ember-contents/translations.js"></script>
 <script type="text/javascript" src="/resources/js/libs/ember-1.4.0.js"></script>
-<script type="text/javascript" src="/resources/js/app.js"></script>
-<script src="/resources/js/libs/jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+<script type="text/javascript" src="/resources/js/ember-application.js"></script>
+<script type="text/javascript" src="/resources/js/ember-contents/search.js"></script>
+<script type="text/javascript" src="/resources/js/ember-contents/bookedFlights.js"></script>
+<script type="text/javascript" src="/resources/js/ember-contents/views.js"></script>
+<script type="text/javascript" src="/resources/js/ember-contents/helpers.js"></script>
+<script src="/resources/js/libs/jquery-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 
 
 </body>
