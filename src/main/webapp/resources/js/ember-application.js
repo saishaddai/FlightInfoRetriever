@@ -16,6 +16,7 @@ App = Ember.Application.create({
 App.Router.map(function () {
     this.resource('bookedFlights');
     this.resource('search');
+    this.resource('error');
 });
 
 /////////////////////////////////////////////////////////// ROUTES //////////////////////////////////////////////////////
@@ -42,23 +43,32 @@ App.IndexRoute = Ember.Route.extend({
     },
     actions: {
         search: function (params) {
-            var query = "/flights?from=";
-            query += "" + params.fromV.substring(0, 3) + "&to=";//add from
-            query += "" + params.toV.substring(0, 3) + "&startDate=";//add to
-            query += "" + params.date1 + "&endDate=";//add startDate
-            query += "" + params.date2 + "&type=oneWay";//add endDate
-            var self = this.controller;
-            console.log('QRY:  ' + query);
-            $.getJSON(query, function (flights) {
-                console.log(flights);
-                App.FLIGHTS = flights;
-                self.transitionToRoute('search');
-            }, function (error) {
-                return error;
-            });
+            var fromParameter = params.fromV.replace(/[^a-zA-Z]/g, '').substring(0, 3);
+            var toParameter = params.toV.replace(/[^a-zA-Z]/g, '').substring(0, 3);
+            if (fromParameter.length < 3 || toParameter.length < 3) {
+                console.warn("some arguments are missing");
+            } else {
+                var query = "/flights?from=";
+                query += "" + fromParameter + "&to=";//add from
+                query += "" + toParameter + "&startDate=";//add to
+                query += "" + params.date1 + "&endDate=";//add startDate
+                query += "" + params.date2 + "&type=oneWay";//add endDate
+                var self = this.controller;
+                console.log('QRY:  ' + query);
+                $.getJSON(query, function (flights) {
+                    console.log(flights);
+                    App.FLIGHTS = flights;
+                    self.transitionToRoute('search');
+                }, function (error) {
+                    App.ErrorMessage = I18n.t('errors.wrongParameters');
+                    self.transitionToRoute('error');
+                });
+            }
         }
     }
 });
+
+App.ErrorMessage = '';
 
 
 

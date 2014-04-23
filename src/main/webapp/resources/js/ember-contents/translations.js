@@ -18,8 +18,9 @@ I18n.translations = {
                 one: 'You have {{count}} flights'
             }
         },
-        error: {
+        errors: {
             noResults: 'No results found',
+            wrongParameters: 'Wrong parameters. Try again',
             internalError: 'An unexpected error happened. Please try later'
         }
     },
@@ -42,8 +43,9 @@ I18n.translations = {
                 one: 'Tienes {{count}} vuelos'
             }
         },
-        error: {
+        errors: {
             noResults: 'No aparecieron resultados',
+            wrongParameters: 'Par&aacute;metros incorrectos',
             internalError: 'Error inesperado. Int&eacute;nte m&aacute;s tarde'
         }
     }

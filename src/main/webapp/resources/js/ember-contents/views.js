@@ -33,8 +33,12 @@ App.AutoCompleteSourceView = Ember.TextField.extend({
         this.$().autocomplete({
             source: function (request, response) {
                 console.log(request);
+                var term = request.term.replace(/[^a-zA-Z]/g, '')
+                if (term.length < 3) {
+                    return [''];
+                }
                 $.ajax({
-                    url: "/airports?startsWith=" + request.term + "&maxRows=10",
+                    url: "/airports?startsWith=" + term + "&maxRows=10",
                     dataType: "json",
                     success: function (data) {
                         console.log(data);
@@ -75,9 +79,13 @@ App.AutoCompleteDestinyView = Ember.TextField.extend({
         this.$().autocomplete({
             source: function (request, response) {
                 console.log(request);
+                var term = request.term.replace(/[^a-zA-Z]/g, '')
+                if (term.length < 3) {
+                    return [''];
+                }
                 $.ajax({
 //                    url: "/airports",
-                    url: "/airports?startsWith=" + request.term + "&maxRows=10",
+                    url: "/airports?startsWith=" + term + "&maxRows=10",
                     dataType: "json",
                     success: function (data) {
                         console.log(data);

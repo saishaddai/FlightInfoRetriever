@@ -110,6 +110,17 @@
 
 
 </script>
+
+<script type="text/x-handlebars" data-template-name="error">
+<h2>{{ App.ErrorMessage }}</h2>
+
+</script>
+
+<script type="text/x-handlebars" data-template-name="fatalError">
+<h2>{{errorMessage}}</h2>
+
+</script>
+
 <script type="text/javascript" src="/resources/js/libs/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="/resources/js/libs/handlebars-1.1.2.js"></script>
 <script type="text/javascript" src="/resources/js/ember-contents/i18n.js"></script>
