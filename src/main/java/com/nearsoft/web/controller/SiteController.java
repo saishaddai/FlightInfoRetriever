@@ -4,7 +4,6 @@ import com.nearsoft.bean.Flight;
 import com.nearsoft.service.APIService;
 import com.nearsoft.service.AirportService;
 import com.nearsoft.service.FlightService;
-import com.nearsoft.service.impl.MockAPIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,10 @@ public class SiteController {
     private final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
     @Autowired
+    @Resource(name = "realAPIService")
     private APIService apiService;
+    @Autowired
+    @Resource(name = "mockAPIService")
     private APIService mockApiService;
 
     @Autowired
@@ -38,7 +42,6 @@ public class SiteController {
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
-        logger.debug("welcome method");
         return "index";
     }
 
@@ -53,7 +56,6 @@ public class SiteController {
     @ResponseBody
     public List<String> airports(@RequestParam(value = "startsWith", required = false, defaultValue = "") String startsWith,
                                  @RequestParam(value = "maxRows", required = false, defaultValue = "10") int maxRows) {
-        logger.debug("airports method");
         return airportService.getAirports(startsWith, maxRows);
     }
 
@@ -74,17 +76,21 @@ public class SiteController {
                                @RequestParam("startDate") String startDate,
                                @RequestParam("endDate") String endDate,
                                @RequestParam("type") String type) {
-        logger.debug("search method");
-        List<Flight> results = null;
-        if (validate(from, to, startDate, endDate, type)) {
+        List<Flight> results;
+        if (validateSearchParameters(from, to, startDate, type)) {
             logger.debug("search method ended successfully");
             from = from.toUpperCase(); //in case it does not come as we want it
             to = to.toUpperCase(); //in case it does not come as we want it
-            results = (List<Flight>) apiService.getFlights(from, to, startDate, endDate, 0, 0, type);
-            if (results == null) {
-                //get mockAPI get results
-                mockApiService = new MockAPIService();
-                results = (List<Flight>) mockApiService.getFlights(from, to, startDate, endDate, 0, 0, type);
+            try {
+                results = apiService.getFlights(from, to, startDate, endDate, "1", "0", "0", type);
+            } catch (ConnectException e) {
+                logger.warn("Unable to connect with API. Using mock answers", e);
+                try {
+                    results = mockApiService.getFlights(from, to, startDate, endDate, "1", "0", "0", type);
+                } catch (ConnectException e1) {
+                    logger.error("Unable to get results from mock API service");
+                    return new ArrayList<>();
+                }
             }
             return results;
         } else {
@@ -129,7 +135,6 @@ public class SiteController {
     @RequestMapping(value = "/bookedFlights", method = RequestMethod.GET)
     @ResponseBody
     public List<Flight> bookedFlights() {
-        logger.debug("booked flights method");
         return flightService.getBookedFlights();
     }
 
@@ -153,11 +158,10 @@ public class SiteController {
      * @param from      the source of the flight
      * @param to        the destiny of the flight
      * @param startDate the date of departure
-     * @param endDate   the date of arriving
      * @param type      the type of flight ("oneWay", "roundTrip", "multiScale")
      * @return false if any parameter is empty, true otherwise
      */
-    private boolean validate(String from, String to, String startDate, String endDate, String type) {
+    public boolean validateSearchParameters(String from, String to, String startDate, String type) {
         if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
             return false;
         } else if (from.length() != 3 || to.length() != 3) {
