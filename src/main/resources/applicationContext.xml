@@ -37,6 +37,6 @@
 
     <bean id="realAPIService" class="com.nearsoft.service.impl.DespegarAPIService"/>
     <bean id="mockAPIService" class="com.nearsoft.service.impl.MockAPIService"/>
-    <bean id="apiConnection" class="com.nearsoft.utils.APIConnection"/>
+    <bean id="apiConnection" class="com.nearsoft.utils.APIConnection" scope="singleton"/>
 
 </beans>
