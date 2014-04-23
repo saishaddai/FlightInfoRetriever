@@ -15,37 +15,37 @@ import java.util.List;
 @Service
 public class FlightService {
 
+    private FlightDAO flightDAO;
+
     @Autowired
-    FlightDAO flightDAO;
+    public FlightService(FlightDAO flightDAO) {
+        this.flightDAO = flightDAO;
+    }
 
     /**
      * Stores or updates a flight object
      *
      * @param flight  a Flight object to store/update
-     * @param options other options var arguments
      * @return true if the process finished alright, false otherwise
      */
-    public boolean saveFlight(Flight flight, Object... options) {
-        boolean result = false;
+    public boolean saveFlight(Flight flight) {
         try {
-            result = flightDAO.createFlight(flight);
-        } catch (Exception e) {
-            e.printStackTrace();
+            return flightDAO.createFlight(flight);
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-        return result;
     }
 
     /**
      * get a List of booked Flights
      *
-     * @param options filter options, none is used in this implementation
      * @return a list of airports as strings (which is, no model objects)
      */
-    public List<Flight> getBookedFlights(Object... options) {
+    public List<Flight> getBookedFlights() {
         List<Flight> bookedFlights = new ArrayList<>();
         try {
             bookedFlights = flightDAO.findAll();
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return bookedFlights;
         }
         return bookedFlights;
@@ -54,17 +54,15 @@ public class FlightService {
     /**
      * Remove a booked Flight
      *
-     * @param options option[0] the identifier for a booked flight
-     * @return true if process ended well
+     * @param options option[0] the identifier for a booked flight, other options may be used in latter versions
+     * @return true if process ended well, false otherwise
      */
     public boolean removeBookedFlight(Object... options) {
-        boolean result = false;
         try {
-            flightDAO.deleteFlight(flightDAO.findById((Long) options[0]));
-        } catch (Exception e) {
-            return result;
+            return flightDAO.deleteFlight(flightDAO.findById((Long) options[0]));
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-        return result;
     }
 
 }

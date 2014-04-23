@@ -1,12 +1,11 @@
 package com.nearsoft.service;
 
-/**
- * Created by slopez on 3/4/14.
- */
+import com.nearsoft.bean.Flight;
+
+import java.net.ConnectException;
+import java.util.List;
+
 public interface APIService {
 
-    public Object autoComplete(Object... options);
-    public Object getFlights(Object... options);
-    public Object getHotels(Object... options);
-    public Object getCars(Object... options);
+    public List<Flight> getFlights(String... options) throws ConnectException;
 }

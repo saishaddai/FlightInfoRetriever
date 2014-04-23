@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by slopez on 3/28/14.
- * Airport service to get all the airports and fill the auto-complete dynamic lists
- */
 @Service
 public class AirportService {
 
-    @Autowired
     AirportDAO airportDAO;
+
+    @Autowired
+    public AirportService(AirportDAO airportDAO) {
+        this.airportDAO = airportDAO;
+    }
 
     /**
      * get a List of airports
@@ -25,14 +25,16 @@ public class AirportService {
      */
     public List<String> getAirports(Object... options) {
         List<String> airportsAsStrings = new ArrayList<>();
-        List<Airport> airports = null;
+        List<Airport> airports;
         try {
-            if (options != null && !((String) options[0]).isEmpty()) {
+            if (options != null && options[0] != null) {
                 airports = airportDAO.autoComplete((String) options[0], (int) options[1]);
             } else {
                 airports = airportDAO.findAll();
             }
-        } catch (Exception e) {}
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
         for(Airport airport : airports) {
             airportsAsStrings.add(airport.toString());
         }
