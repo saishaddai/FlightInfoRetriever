@@ -41,17 +41,17 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
         getCurrentSession().delete(type);
     }
 
-    protected Criteria createCriteria(boolean cacheable, Criterion... criterion) {
+    protected Criteria createCriteria(boolean useCache, Criterion... criterion) {
         Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
         for (Criterion criterionItem : criterion) {
             criteria.add(criterionItem);
         }
-        criteria.setCacheable(cacheable);
+        criteria.setCacheable(useCache);
         return criteria;
     }
 
-    protected List<T> findByCriteria(boolean cacheable, Criterion... criterion) {
-        Criteria criteria = createCriteria(cacheable, criterion);
+    protected List<T> findByCriteria(boolean useCache, Criterion... criterion) {
+        Criteria criteria = createCriteria(useCache, criterion);
         return criteria.list();
     }
 }
