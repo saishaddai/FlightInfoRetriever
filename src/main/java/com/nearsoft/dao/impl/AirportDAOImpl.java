@@ -66,6 +66,6 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
         }
 
         or.add(Restrictions.ilike("name", prefixSuffix, MatchMode.ANYWHERE));
-        return airports;
+        return findByCriteria(true, or);
     }
 }
