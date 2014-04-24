@@ -23,7 +23,7 @@ public class AirportServiceImpl implements AirportService {
      * Get a list or airports that match with a string in its description, name, iata code, etc
      * If none of the results is provided, it will return all the airports
      *
-     * @param part       a piece of text that may be present in a part of the description of an airport.
+     * @param part a piece of text that may be present in a part of the description of an airport.
      * @param numResults the expected number of results
      * @return a number around of <code>numResults</code> of string-like airports
      */
