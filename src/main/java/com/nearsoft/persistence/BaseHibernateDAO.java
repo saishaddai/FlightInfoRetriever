@@ -33,10 +33,6 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
         return getCurrentSession().save(type) != null;
     }
 
-    protected void update(T type) {
-        getCurrentSession().saveOrUpdate(type);
-    }
-
     protected void delete(T type) {
         getCurrentSession().delete(type);
     }
