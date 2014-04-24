@@ -1,8 +1,9 @@
-package com.nearsoft.service;
+package com.nearsoft.service.impl;
 
 import com.nearsoft.bean.Flight;
 import com.nearsoft.dao.FlightDAO;
 import com.nearsoft.dao.impl.FlightDAOImpl;
+import com.nearsoft.service.FlightService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import java.util.List;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-public class FlightServiceTest {
+public class FlightServiceImplTest {
 
     FlightService flightService;
     FlightDAO flightDAO;
@@ -21,7 +22,7 @@ public class FlightServiceTest {
     @Before
     public void setUp() throws Exception {
         flightDAO = createStrictMock(FlightDAOImpl.class);
-        flightService = new FlightService(flightDAO);
+        flightService = new FlightServiceImpl(flightDAO);
     }
 
     @After

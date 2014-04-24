@@ -1,8 +1,9 @@
-package com.nearsoft.service;
+package com.nearsoft.service.impl;
 
 import com.nearsoft.bean.Airport;
 import com.nearsoft.dao.AirportDAO;
 import com.nearsoft.dao.impl.AirportDAOImpl;
+import com.nearsoft.service.AirportService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import static org.junit.Assert.*;
  * Created by Saidel Lopez on 3/31/14.
  * Class to test all the airports data access object features
  */
-public class AirportServiceTest {
+public class AirportServiceImplTest {
 
     AirportService airportService;
     AirportDAO airportDAO;
@@ -25,7 +26,7 @@ public class AirportServiceTest {
     @Before
     public void setUp() throws Exception {
         airportDAO = createStrictMock(AirportDAOImpl.class);
-        airportService = new AirportService(airportDAO);
+        airportService = new AirportServiceImpl(airportDAO);
     }
 
     @After
