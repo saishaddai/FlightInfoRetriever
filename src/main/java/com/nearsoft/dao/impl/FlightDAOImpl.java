@@ -14,7 +14,6 @@ import java.util.List;
 @Transactional
 public class FlightDAOImpl extends BaseHibernateDAO<Flight, Long> implements FlightDAO {
 
-
     private final SessionFactory sessionFactory;
 
     @Autowired
@@ -45,12 +44,6 @@ public class FlightDAOImpl extends BaseHibernateDAO<Flight, Long> implements Fli
     @Override
     public boolean createFlight(Flight flight) {
         return create(flight);
-    }
-
-    @Override
-    public boolean updateFlight(Flight flight) {
-        update(flight);
-        return true;
     }
 
     @Override
