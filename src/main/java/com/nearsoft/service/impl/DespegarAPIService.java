@@ -102,7 +102,7 @@ public class DespegarAPIService implements APIService {
     Map<String, Object> processOutboundRoutes(List<Map> outboundRoutes, Map<String, Object> partialResult) {
         for (Map route : outboundRoutes) {
             partialResult.put("estimatedTimeTravel", route.get("duration"));
-            partialResult.put("segments", (List<Map<String, Map>>) route.get("segments")); //Segments Level 3
+            partialResult.put("segments", (List<Map<String, Map>>) route.get("segments"));
         }
         partialResult.remove("outboundRoutes");
         return partialResult;
@@ -111,7 +111,7 @@ public class DespegarAPIService implements APIService {
     /**
      * process the segments of a despegar.com API response
      *
-     * @param segments      a list of results from despegar,com containing segments
+     * @param segments a list of results from despegar,com containing segments
      * @param partialResult the partial result with all the information already processed
      * @return the partial result with the new processed attributes
      */
@@ -147,14 +147,9 @@ public class DespegarAPIService implements APIService {
     /**
      * Formats a query for calling getFlights method in API
      *
-     * @param source        the source place in IATA code fashion
-     * @param destiny       the destiny place in IATA code fashion
-     * @param departureDate the departure time as a date string. Default 'tomorrow'
-     * @param arrivingDate   the arrival time as a date string. Default 'next week'
-     * @param adults        the number of adults . Default 1
-     * @param children      the number of children. Default 0
-     * @param infants       the number of infants (babies). Default 0
-     * @param type          the type of flight (one way, round trip). Default 'one way'
+     * @param source the source place in IATA code fashion
+     * @param destiny the destiny place in IATA code fashion
+     * @param type the type of flight (one way, round trip). Default 'one way'
      */
     String formatGetFlightsQuery(String source, String destiny, String departureDate,
                                  String arrivingDate, int adults, int children,
@@ -166,7 +161,7 @@ public class DespegarAPIService implements APIService {
                 typeString + "/" + (source.isEmpty() ? "HMO" : source) + "/" + (destiny.isEmpty() ? "MEX" : destiny) + "/" +
                 (departureDate == null ? sdf.format(getDate(DespegarAPIService.TOMORROW)) : departureDate) + "/";
         if (type == DespegarAPIService.ROUND_TRIP) {
-            query += (arrivingDate == null ? sdf.format(getDate(DespegarAPIService.NEXT_WEEK)) : arrivingDate) + "/"; //returning date
+            query += (arrivingDate == null ? sdf.format(getDate(DespegarAPIService.NEXT_WEEK)) : arrivingDate) + "/";
         }
         query += adults + "/" + children + "/" + infants;
         return query;

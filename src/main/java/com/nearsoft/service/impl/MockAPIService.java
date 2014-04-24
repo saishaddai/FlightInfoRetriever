@@ -23,6 +23,9 @@ public class MockAPIService implements APIService {
                                    String arrivingDate, int numberOfAdults, int numberOfChildren,
                                    int numberOfInfants, int type, String... otherFilters) throws ConnectException {
         logger.warn("using generic responses from mock class:");
+        if (departureDate.isEmpty()) {
+            throw new ConnectException("Unable to get response from the server");
+        }
         List<Flight> results = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             results.add(new Flight((long) i, (i + 1) * 100 + "", "oneWay", departureDate, departureDate,

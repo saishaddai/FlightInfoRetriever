@@ -10,12 +10,12 @@ public interface APIService {
     /**
      * Get flights given basic filters
      *
-     * @param type         the type of flight (one way, )
+     * @param type the type of flight (one way, )
      * @param otherFilters other filters to help narrow down the results
      */
     public List<Flight> getFlights(String source, String destiny,
                                    String departureDate, String arrivingDate,
                                    int numberOfAdults, int numberOfChildren,
-                                   int numberOfInfants, int type, String... otherFilters)
-            throws ConnectException;
+                                   int numberOfInfants, int type,
+                                   String... otherFilters) throws ConnectException;
 }
