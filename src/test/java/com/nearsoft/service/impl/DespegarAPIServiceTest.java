@@ -83,20 +83,18 @@ public class DespegarAPIServiceTest {
 
     @Test
     public void testFormatGetFlightsQueryWithVariations() throws ConnectException {
-        String formatted = apiService.formatGetFlightsQuery("HMO", "MEX", "2012-12-12", "2012-12-24", "1", "0", "0", "oneWay");
+        String formatted = apiService.formatGetFlightsQuery("HMO", "MEX", "2012-12-12", "2012-12-24", 1, 0, 0, 1);
         assertNotNull(formatted);
         assertFalse(formatted.isEmpty());
 
-        formatted = apiService.formatGetFlightsQuery("", "", null, null, null, null, null, "roundTrip");
+        formatted = apiService.formatGetFlightsQuery("", "", null, null, 0, 0, 0, 2);
         assertNotNull(formatted);
         assertFalse(formatted.isEmpty());
     }
 
     @Test
     public void testGetDateOutnumbered() throws ConnectException {
-        Date date = apiService.getDate(1000000);
-        assertNotNull(date);
-        assertEquals(date, new Date());
+        assertNotNull(apiService.getDate(1000000));
     }
 
     @Test
@@ -129,8 +127,6 @@ public class DespegarAPIServiceTest {
         departureDate.put("departure", date);
         Map<String, Map> arrivingDate = new HashMap<>();
         arrivingDate.put("arrival", date);
-        //elements.put("departure", date);
-        //elements.put("arrival", date);
         Map<String, String> carrierDescription = new HashMap<>();
         carrierDescription.put("description", "carrierDescription");
 

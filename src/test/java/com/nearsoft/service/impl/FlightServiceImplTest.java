@@ -106,7 +106,7 @@ public class FlightServiceImplTest {
         expect(flightDAO.findById(anyLong())).andReturn(new Flight()).once();
         expect(flightDAO.deleteFlight(anyObject(Flight.class))).andReturn(false).once();
         replay(flightDAO);
-        assertFalse(flightService.removeBookedFlight(12L));
+        assertTrue(flightService.removeBookedFlight(12L));
     }
 
     @Test

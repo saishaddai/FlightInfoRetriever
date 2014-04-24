@@ -40,7 +40,7 @@ public class AirportServiceImplTest {
         expect(airportDAO.findAll()).andThrow(new IllegalArgumentException()).once();
         expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andThrow(new IllegalArgumentException()).once();
         replay(airportDAO);
-        List<String> airports = airportService.getAirports(null, null);
+        List<String> airports = airportService.getAirports(null, 0);
         assertNotNull(airports);
         assertTrue(airports.isEmpty());
         airports = airportService.getAirports("test", 0);
@@ -54,7 +54,7 @@ public class AirportServiceImplTest {
         expect(airportDAO.findAll()).andReturn(mockEmptyResult).once();
         expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andReturn(mockEmptyResult).once();
         replay(airportDAO);
-        List<String> airports = airportService.getAirports(null);
+        List<String> airports = airportService.getAirports(null, 0);
         assertNotNull(airports);
         assertTrue(airports.isEmpty());
         airports = airportService.getAirports("test", 0);
@@ -66,14 +66,14 @@ public class AirportServiceImplTest {
     public void testGetBookedFlightsAndGetCorrectResponse() {
         List<Airport> mockAirports = new ArrayList<Airport>() {
             {
-                add(new Airport(0L, "test", "TST", "test", "test", "test"));
-                add(new Airport(1L, "test", "TST", "test", "test", "test"));
+                add(new Airport(0L, "test", "TST", "test", "test"));
+                add(new Airport(1L, "test", "TST", "test", "test"));
             }
         };
         expect(airportDAO.findAll()).andReturn(mockAirports).once();
         expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andReturn(mockAirports).once();
         replay(airportDAO);
-        List<String> airports = airportService.getAirports(null);
+        List<String> airports = airportService.getAirports(null, 10);
         assertNotNull(airports);
         assertFalse(airports.isEmpty());
         airports = airportService.getAirports("test", 10);

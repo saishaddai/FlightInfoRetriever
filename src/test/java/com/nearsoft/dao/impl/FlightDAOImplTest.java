@@ -118,11 +118,6 @@ public class FlightDAOImplTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testUpdateFlightWithNullArgument() throws Exception {
-        flightDAO.updateFlight(null);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testDeleteFlightWithNullArgument() throws Exception {
         flightDAO.deleteFlight(null);
     }
