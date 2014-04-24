@@ -9,7 +9,8 @@ import org.junit.Test;
 import java.net.ConnectException;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Saidel Lopez on 3/31/14.
@@ -29,32 +30,16 @@ public class MockAPIServiceTest {
         apiService = null;
     }
 
-
     @Test(expected = ConnectException.class)
-    public void testFlightsWithIncorrectArguments() throws ConnectException {
-        List<Flight> flights = apiService.getFlights();
-        assertNotNull(flights);
-        assertFalse(flights.isEmpty());
-        flights = apiService.getFlights("test");
-        assertNotNull(flights);
-        assertFalse(flights.isEmpty());
-        flights = apiService.getFlights("test", null);
-        assertNotNull(flights);
-        assertFalse(flights.isEmpty());
-        flights = apiService.getFlights(null, null);
-        assertNotNull(flights);
-        assertFalse(flights.isEmpty());
+    public void testFlightsWithIncorrectArguments() throws Exception {
+        apiService.getFlights("TST", "TS1", "", "2014-12-24", 1, 0, 0, 1);
     }
 
     @Test
-    public void testFlightsWithCorrectArguments() throws Exception {
-        try {
-            List<Flight> flights = apiService.getFlights("TST", "TS1", "2014-12-12", "2014-12-24", "1", "0", "0", "oneWay");
-            assertNotNull(flights);
-            assertFalse(flights.isEmpty());
-        } catch (ConnectException e) {
-            fail();
-        }
+    public void testFlights() throws Exception {
+        List<Flight> flights = apiService.getFlights("TST", "TS1", "2014-12-12", "2014-12-24", 1, 0, 0, 1);
+        assertNotNull(flights);
+        assertFalse(flights.isEmpty());
     }
 
 }
