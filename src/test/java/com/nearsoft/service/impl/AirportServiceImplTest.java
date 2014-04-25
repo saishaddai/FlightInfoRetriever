@@ -37,7 +37,7 @@ public class AirportServiceImplTest {
 
     @Test
     public void testAirportsWithException() {
-        expect(airportDAO.findAll()).andThrow(new IllegalArgumentException()).once();
+        expect(airportDAO.findAll(anyInt())).andThrow(new IllegalArgumentException()).once();
         expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andThrow(new IllegalArgumentException()).once();
         replay(airportDAO);
         List<String> airports = airportService.getAirports(null, 0);
@@ -51,7 +51,7 @@ public class AirportServiceImplTest {
     @Test
     public void testGetAirportsAndGetEmptyList() {
         List<Airport> mockEmptyResult = new ArrayList<>();
-        expect(airportDAO.findAll()).andReturn(mockEmptyResult).once();
+        expect(airportDAO.findAll(anyInt())).andReturn(mockEmptyResult).once();
         expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andReturn(mockEmptyResult).once();
         replay(airportDAO);
         List<String> airports = airportService.getAirports(null, 0);
@@ -70,7 +70,7 @@ public class AirportServiceImplTest {
                 add(new Airport(1L, "test", "TST", "test", "test"));
             }
         };
-        expect(airportDAO.findAll()).andReturn(mockAirports).once();
+        expect(airportDAO.findAll(anyInt())).andReturn(mockAirports).once();
         expect(airportDAO.autoComplete(anyObject(String.class), anyInt())).andReturn(mockAirports).once();
         replay(airportDAO);
         List<String> airports = airportService.getAirports(null, 10);

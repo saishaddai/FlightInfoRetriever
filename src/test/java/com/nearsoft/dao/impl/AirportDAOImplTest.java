@@ -76,7 +76,6 @@ public class AirportDAOImplTest {
         replay(sessionFactory, session, criteria);
         List<Airport> airports = airportDAO.autoComplete("test", 0);
         assertTrue(airports.isEmpty());
-        verify(sessionFactory, session, criteria);
     }
 
     @Test
@@ -86,16 +85,16 @@ public class AirportDAOImplTest {
         replay(sessionFactory, session, criteria);
         List<Airport> airports = airportDAO.autoComplete("", -1);
         assertTrue(airports.isEmpty());
-        verify(sessionFactory, session, criteria);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testAutoCompleteWithHugeMaxRows() throws Exception {
         expect(session.createCriteria(Airport.class)).andReturn(criteria).anyTimes();
         expect(criteria.list()).andReturn(new ArrayList()).once();
         replay(sessionFactory, session, criteria);
-        airportDAO.autoComplete("test", Integer.MAX_VALUE);
-        verify(sessionFactory, session, criteria);
+        List<Airport> airports = airportDAO.autoComplete("test", Integer.MAX_VALUE);
+        assertNotNull(airports);
+        assertTrue(airports.isEmpty());
     }
 
     @Test
@@ -109,7 +108,6 @@ public class AirportDAOImplTest {
         List<Airport> airports = airportDAO.autoComplete("test", 1);
         assertNotNull(airports);
         assertTrue(airports.size() >= 0);
-        verify(sessionFactory, session, criteria);
     }
 
     @Test
@@ -117,21 +115,19 @@ public class AirportDAOImplTest {
         expect(session.createCriteria(Airport.class)).andReturn(criteria).once();
         expect(criteria.list()).andReturn(null).once();
         replay(sessionFactory, session, criteria);
-        assertNull(airportDAO.findAll());
-        verify(sessionFactory, session, criteria);
+        List<Airport> airports = airportDAO.findAll(10);
+        assertNotNull(airports);
+        assertTrue(airports.isEmpty());
     }
 
     @Test
     public void testFindAll() throws Exception {
         List<Airport> results = new ArrayList<>();
-        results.add(new Airport(30916L, "Airport", "DIG", "China", "Test"));
-        results.add(new Airport(27244L, "Airport", "YAN", "China", "Test"));
         expect(session.createCriteria(Airport.class)).andReturn(criteria).once();
         expect(criteria.list()).andReturn(results).once();
         replay(sessionFactory, session, criteria);
-        List<Airport> airports = airportDAO.findAll();
+        List<Airport> airports = airportDAO.findAll(10);
         assertNotNull(airports);
-        assertTrue(airports.size() > 0);
-        verify(sessionFactory, session, criteria);
+        assertTrue(airports.isEmpty());
     }
 }

@@ -58,24 +58,27 @@ public class FlightServiceImplTest {
         expect(flightDAO.createFlight(flight)).andReturn(true).once();
         replay(flightDAO);
         assertTrue(flightService.saveFlight(flight));
+        verify(flightDAO);
     }
 
     @Test
     public void testGetBookedFlightsWithException() {
-        expect(flightDAO.findAll()).andThrow(new IllegalArgumentException()).once();
+        expect(flightDAO.findAll(anyInt())).andThrow(new IllegalArgumentException()).once();
         replay(flightDAO);
-        List<Flight> bookedFlights = flightService.getBookedFlights();
+        List<Flight> bookedFlights = flightService.getBookedFlights(10);
         assertNotNull(bookedFlights);
         assertTrue(bookedFlights.isEmpty());
+        verify(flightDAO);
     }
 
     @Test
     public void testGetBookedFlightsAndGetEmptyList() {
-        expect(flightDAO.findAll()).andReturn(new ArrayList<Flight>()).once();
+        expect(flightDAO.findAll(10)).andReturn(new ArrayList<Flight>()).once();
         replay(flightDAO);
-        List<Flight> bookedFlights = flightService.getBookedFlights();
+        List<Flight> bookedFlights = flightService.getBookedFlights(10);
         assertNotNull(bookedFlights);
         assertTrue(bookedFlights.isEmpty());
+        verify(flightDAO);
     }
 
     @Test
@@ -86,11 +89,12 @@ public class FlightServiceImplTest {
                 add(new Flight(1L, "0", "oneWay", "2014-12-12", "2014-12-24", "companies", "5h", "airports", "non-stop", "", true));
             }
         };
-        expect(flightDAO.findAll()).andReturn(mockBookedFlights).once();
+        expect(flightDAO.findAll(anyInt())).andReturn(mockBookedFlights).once();
         replay(flightDAO);
-        List<Flight> bookedFlights = flightService.getBookedFlights();
+        List<Flight> bookedFlights = flightService.getBookedFlights(anyInt());
         assertNotNull(bookedFlights);
         assertFalse(bookedFlights.isEmpty());
+        verify(flightDAO);
     }
 
     @Test

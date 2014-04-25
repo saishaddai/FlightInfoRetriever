@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -101,17 +102,25 @@ public class SiteControllerTest {
 
     @Test
     public void testAirportsCorrectly() throws Exception {
-        //test everything is alright / correct url, correct media type to accept, correct content type
+        //test everything is alright / correct URL, correct media type to accept, correct content type
         this.mockmvc.perform(get("/airports").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
-        //you cannot ask for an accurate answer because the results came from DB so it must
-        //work for you to ask for the content-type
-        //and tell us that whether the answer can be empty or not it is a JSON string anyway
 
+        //an URL variation that should work as well
         this.mockmvc.perform(get("/airports/").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
+
+        //another variation with parameters. This time we're going to test the quality of the answer
+        MockHttpServletResponse response = this.mockmvc.perform(get("/airports?part=mexico&maxRows=1")
+                .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        String responseAsString = response.getContentAsString();
+        assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8")); //which proves is a JSON
+        assertTrue(responseAsString.startsWith("[") && responseAsString.endsWith("]"));//to prove that is a JSON and is an array
+
     }
 
 
@@ -152,9 +161,14 @@ public class SiteControllerTest {
                 sdf.format(getDate(2)) + "&type=oneWay";
         this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk());
-        //you cannot ask for an accurate answer because the results came from API so it must
-        //work for you to ask for the content-type
-        //and tell us that whether the answer can be empty or not it is a JSON string anyway
+
+        //another variation with parameters. This time we're going to test the quality of the answer
+        MockHttpServletResponse response = this.mockmvc.perform(get(query)
+                .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        assertTrue(response.getContentAsString().equalsIgnoreCase("[]"));//it is an empty response but still JSON string
+        assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8"));
     }
 
     @Test
@@ -165,9 +179,28 @@ public class SiteControllerTest {
                 sdf.format(getDate(2)) + "&type=oneWay";
         this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk());
-        //you cannot ask for an accurate answer because the results came from API so it must
-        //work for you to ask for the content-type
-        //and tell us that whether the answer can be empty or not it is a JSON string anyway
+
+        //another variation with parameters. This time we're going to test the quality of the answer
+        MockHttpServletResponse response = this.mockmvc.perform(get(query)
+                .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        String responseAsString = response.getContentAsString();
+        assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8")); //which proves is a JSON
+        assertTrue(responseAsString.startsWith("[") && responseAsString.endsWith("]"));//to prove that is a JSON and is an array
+        if (responseAsString.length() > 2) {//there's at least one result
+            assertTrue(responseAsString.contains("id\":"));
+            assertTrue(responseAsString.contains("price\":"));
+            assertTrue(responseAsString.contains("type\":"));
+            assertTrue(responseAsString.contains("estimateDate1\":"));
+            assertTrue(responseAsString.contains("estimateDate2\":"));
+            assertTrue(responseAsString.contains("companies\":"));
+            assertTrue(responseAsString.contains("estimateTimeTravel\":"));
+            assertTrue(responseAsString.contains("airports\":"));
+            assertTrue(responseAsString.contains("stops\":"));
+            assertTrue(responseAsString.contains("scales\":"));
+            assertTrue(responseAsString.contains("booked\":false"));
+        }
     }
 
 
@@ -177,7 +210,7 @@ public class SiteControllerTest {
         this.mockmvc.perform(get("/saveFlight").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().is4xxClientError());
 
-        this.mockmvc.perform(get("dfisjfoidfj").accept(MediaType.parseMediaType("application/json")))
+        this.mockmvc.perform(get("test").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -203,11 +236,20 @@ public class SiteControllerTest {
         //test everything is alright / correct url, correct media type to accept, correct content type
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String query = "/saveFlight?price=100&type=oneWay&estimatedDate1=" + sdf.format(getDate(1)) + "&estimatedDate2=" +
-                sdf.format(getDate(2)) + "&companies=Aeromajico&estimateTimeTravel=3h20M&airports=HMO,MEX&stops=non-stop&scales=";
+                sdf.format(getDate(2)) + "&companies=Test&estimateTimeTravel=3h20M&airports=HMO,MEX&stops=non-stop&scales=";
         this.mockmvc.perform(get(query).accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
+        //another variation with parameters. This time we're going to test the quality of the answer
+        MockHttpServletResponse response = this.mockmvc.perform(get(query)
+                .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        String responseAsString = response.getContentAsString();
+        System.out.println(responseAsString);
+        assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8")); //which proves is a JSON
+        assertTrue(responseAsString.equals("true"));//to prove that is a JSON and is true string
     }
 
     //get booked flights
@@ -247,6 +289,28 @@ public class SiteControllerTest {
         this.mockmvc.perform(get("/bookedFlights/").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
+
+        //another variation with parameters. This time we're going to test the quality of the answer
+        MockHttpServletResponse response = this.mockmvc.perform(get("/bookedFlights")
+                .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        String responseAsString = response.getContentAsString();
+        assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8")); //which proves is a JSON
+        assertTrue(responseAsString.startsWith("[") && responseAsString.endsWith("]"));//to prove that is a JSON and is an array
+        if (responseAsString.length() > 2) {//there's at least one result
+            assertTrue(responseAsString.contains("id\":"));
+            assertTrue(responseAsString.contains("price\":"));
+            assertTrue(responseAsString.contains("type\":"));
+            assertTrue(responseAsString.contains("estimateDate1\":"));
+            assertTrue(responseAsString.contains("estimateDate2\":"));
+            assertTrue(responseAsString.contains("companies\":"));
+            assertTrue(responseAsString.contains("estimateTimeTravel\":"));
+            assertTrue(responseAsString.contains("airports\":"));
+            assertTrue(responseAsString.contains("stops\":"));
+            assertTrue(responseAsString.contains("scales\":"));
+            assertTrue(responseAsString.contains("booked\":true"));
+        }
     }
 
     //remove booked flights
@@ -282,6 +346,29 @@ public class SiteControllerTest {
         this.mockmvc.perform(get("/removeBookedFlight?id=1").accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
+
+        //another variation with parameters. This time we're going to test the quality of the answer
+        MockHttpServletResponse response = this.mockmvc.perform(get("/removeBookedFlight?id=1")
+                .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        String responseAsString = response.getContentAsString();
+        System.out.println(responseAsString);
+        assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8")); //which proves is a JSON
+        assertTrue(responseAsString.startsWith("[") && responseAsString.endsWith("]"));//to prove that is a JSON and is an array
+        if (responseAsString.length() > 2) {//there's at least one result
+            assertTrue(responseAsString.contains("id\":"));
+            assertTrue(responseAsString.contains("price\":"));
+            assertTrue(responseAsString.contains("type\":"));
+            assertTrue(responseAsString.contains("estimateDate1\":"));
+            assertTrue(responseAsString.contains("estimateDate2\":"));
+            assertTrue(responseAsString.contains("companies\":"));
+            assertTrue(responseAsString.contains("estimateTimeTravel\":"));
+            assertTrue(responseAsString.contains("airports\":"));
+            assertTrue(responseAsString.contains("stops\":"));
+            assertTrue(responseAsString.contains("scales\":"));
+            assertTrue(responseAsString.contains("booked\":true"));
+        }
 
     }
 

@@ -73,22 +73,19 @@ public class FlightDAOImplTest {
         expect(session.createCriteria(Flight.class)).andReturn(criteria).once();
         expect(criteria.list()).andReturn(null).once();
         replay(sessionFactory, session, criteria);
-        assertNull(flightDAO.findAll());
-        verify(sessionFactory, session, criteria);
+        List<Flight> results = flightDAO.findAll(10);
+        assertTrue(results.isEmpty());
     }
 
     @Test
     public void testFindAll() throws Exception {
         List<Flight> results = new ArrayList<>();
-        results.add(new Flight(30916L, "test", "test", "test", "test", "test", "test", "test", "test", "test", true));
-        results.add(new Flight(27244L, "test", "test", "test", "test", "test", "test", "test", "test", "test", true));
         expect(session.createCriteria(Flight.class)).andReturn(criteria).once();
         expect(criteria.list()).andReturn(results).once();
         replay(sessionFactory, session, criteria);
-        List<Flight> airports = flightDAO.findAll();
+        List<Flight> airports = flightDAO.findAll(10);
         assertNotNull(airports);
-        assertTrue(airports.size() > 0);
-        verify(sessionFactory, session, criteria);
+        assertTrue(airports.isEmpty());
     }
 
     @Test
