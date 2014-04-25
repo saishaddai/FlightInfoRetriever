@@ -55,21 +55,24 @@ public class SiteController {
      */
     @RequestMapping(value = "/flights", method = RequestMethod.GET)
     @ResponseBody
-    public List<Flight> searchFlights(@RequestParam("from") String from,
-                               @RequestParam("to") String to,
+    public List<Flight> searchFlights(@RequestParam("from") String source,
+                                      @RequestParam("to") String destiny,
                                @RequestParam("startDate") String startDate,
                                @RequestParam("endDate") String endDate,
-                               @RequestParam("type") String type) {
+                               @RequestParam("type") String type,
+                               @RequestParam(value = "numAdults", required = false, defaultValue = "1") int numAdults,
+                               @RequestParam(value = "numChildren", required = false, defaultValue = "0") int numChildren,
+                               @RequestParam(value = "numInfants", required = false, defaultValue = "0") int numInfants) {
         List<Flight> results;
-        if (validateSearchParameters(from, to, startDate, type)) {
-            from = from.toUpperCase(); //in case it does not come as we want it
-            to = to.toUpperCase(); //in case it does not come as we want it
+        if (validateSearchParameters(source, destiny, startDate, type)) {
+            source = source.toUpperCase(); //in case it does not come as we want it
+            destiny = destiny.toUpperCase(); //in case it does not come as we want it
             try {
-                results = apiService.getFlights(from, to, startDate, endDate, 1, 0, 0, 1);
+                results = apiService.getFlights(source, destiny, startDate, endDate, numAdults, numChildren, numInfants, 1);
             } catch (ConnectException e) {
                 logger.warn("Unable to connect with API. Using mock answers", e);
                 try {
-                    results = mockApiService.getFlights(from, to, startDate, endDate, 1, 0, 0, 1);
+                    results = mockApiService.getFlights(source, destiny, startDate, endDate, numAdults, numChildren, numInfants, 1);
                 } catch (ConnectException e1) {
                     logger.error("Unable to get results from mock API service");
                     return new ArrayList<>();
@@ -109,7 +112,6 @@ public class SiteController {
         return flightService.saveFlight(new Flight(0L, price, type, estimatedDate1, estimatedDate2, companies, estimateTimeTravel, airports, stops, scales, true));
     }
 
-
     @RequestMapping(value = "/bookedFlights", method = RequestMethod.GET)
     @ResponseBody
     public List<Flight> getBookedFlights(@RequestParam(value = "numResults", required = false, defaultValue = "10") int numResults) {
@@ -125,7 +127,6 @@ public class SiteController {
         flightService.removeBookedFlight(idBookedFlight);
         return flightService.getBookedFlights(numResults);
     }
-
 
     boolean validateSearchParameters(String source, String destiny, String startDate, String type) {
         logger.debug("validating the search parameters");
