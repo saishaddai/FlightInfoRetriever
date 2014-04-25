@@ -10,7 +10,7 @@ public interface FlightService {
 
     public boolean saveFlight(Flight flight);
 
-    public List<Flight> getBookedFlights();
+    public List<Flight> getBookedFlights(int maxResults);
 
     public boolean removeBookedFlight(Long id);
 

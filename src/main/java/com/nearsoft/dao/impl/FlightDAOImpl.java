@@ -37,8 +37,8 @@ public class FlightDAOImpl extends BaseHibernateDAO<Flight, Long> implements Fli
     }
 
     @Override
-    public List<Flight> findAll() {
-        return find();
+    public List<Flight> findAll(int maxResults) {
+        return find(maxResults);
     }
 
     @Override

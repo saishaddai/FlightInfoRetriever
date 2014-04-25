@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface FlightDAO {
 
-    Flight findById(Long id);
+    public Flight findById(Long id);
 
-    List<Flight> findAll();
+    public List<Flight> findAll(int maxResults);
 
-    boolean createFlight(Flight flight);
+    public boolean createFlight(Flight flight);
 
-    boolean deleteFlight(Flight flight);
+    public boolean deleteFlight(Flight flight);
 }

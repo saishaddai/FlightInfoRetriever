@@ -43,10 +43,10 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<Flight> getBookedFlights() {
+    public List<Flight> getBookedFlights(int maxResults) {
         List<Flight> bookedFlights = new ArrayList<>();
         try {
-            bookedFlights = flightDAO.findAll();
+            bookedFlights = flightDAO.findAll(maxResults);
         } catch (IllegalArgumentException e) {
             return bookedFlights;
         }

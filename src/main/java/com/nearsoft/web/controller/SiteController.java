@@ -36,57 +36,40 @@ public class SiteController {
     @Autowired
     private FlightService flightService;
 
-    /**
-     * Redirects to the landing page
-     * @return the index.jsp of the landing page
-     */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
         return "index";
     }
 
-    /**
-     * Gets a list of all the airports. The list came from a database and it changes almost any
-     *
-     * @param startsWith a part of the string to look for among airports
-     * @param maxRows the approximate number of expected results, it is usually bigger
-     * @return a list of strings, each one with a textual name and description of an airport
-     */
     @RequestMapping(value = "/airports", method = RequestMethod.GET)
     @ResponseBody
-    public List<String> airports(@RequestParam(value = "startsWith", required = false, defaultValue = "") String startsWith,
-                                 @RequestParam(value = "maxRows", required = false, defaultValue = "10") int maxRows) {
-        return airportService.getAirports(startsWith, maxRows);
+    public List<String> getAirports(@RequestParam(value = "startsWith", required = false, defaultValue = "") String startsWith,
+                                    @RequestParam(value = "maxRows", required = false, defaultValue = "10") int numResults) {
+        return airportService.getAirports(startsWith, numResults);
     }
 
     /**
-     * Get the flights values with the given search options
-     * @param from the source of the flight
-     * @param to the destiny of the flight
-     * @param startDate the date of departure
-     * @param endDate the date of arriving
      * @param type the type of flight ("oneWay", "roundTrip", "multiScale")
      * @return a list of flight objects that match the options
      * @since 1.0 Only works for type One Way (round trip is implemented but not tested)
      */
     @RequestMapping(value = "/flights", method = RequestMethod.GET)
     @ResponseBody
-    public List<Flight> search(@RequestParam("from") String from,
+    public List<Flight> searchFlights(@RequestParam("from") String from,
                                @RequestParam("to") String to,
                                @RequestParam("startDate") String startDate,
                                @RequestParam("endDate") String endDate,
                                @RequestParam("type") String type) {
         List<Flight> results;
         if (validateSearchParameters(from, to, startDate, type)) {
-            logger.debug("search method ended successfully");
             from = from.toUpperCase(); //in case it does not come as we want it
             to = to.toUpperCase(); //in case it does not come as we want it
             try {
-                results = apiService.getFlights(from, to, startDate, endDate, "1", "0", "0", type);
+                results = apiService.getFlights(from, to, startDate, endDate, 1, 0, 0, 1);
             } catch (ConnectException e) {
                 logger.warn("Unable to connect with API. Using mock answers", e);
                 try {
-                    results = mockApiService.getFlights(from, to, startDate, endDate, "1", "0", "0", type);
+                    results = mockApiService.getFlights(from, to, startDate, endDate, 1, 0, 0, 1);
                 } catch (ConnectException e1) {
                     logger.error("Unable to get results from mock API service");
                     return new ArrayList<>();
@@ -127,46 +110,30 @@ public class SiteController {
     }
 
 
-    /**
-     * Gets a list of all the booked flights.
-     *
-     * @return a list of flights booked in database
-     */
     @RequestMapping(value = "/bookedFlights", method = RequestMethod.GET)
     @ResponseBody
-    public List<Flight> bookedFlights() {
-        return flightService.getBookedFlights();
+    public List<Flight> getBookedFlights(@RequestParam(value = "numResults", required = false, defaultValue = "10") int numResults) {
+        logger.debug("get booked flight method");
+        return flightService.getBookedFlights(numResults);
     }
 
-
-    /**
-     * Removes a booked flight.
-     *
-     * @return a list of flights booked in database
-     */
     @RequestMapping(value = "/removeBookedFlight", method = RequestMethod.GET)
     @ResponseBody
-    public List<Flight> removeBookedFlight(@RequestParam("id") Long id) {
+    public List<Flight> removeBookedFlight(@RequestParam("id") Long idBookedFlight,
+                                           @RequestParam(value = "maxRows", required = false, defaultValue = "10") int numResults) {
         logger.debug("remove booked flight method");
-        flightService.removeBookedFlight(id);//i don't care the result anyway
-        return flightService.getBookedFlights();
+        flightService.removeBookedFlight(idBookedFlight);
+        return flightService.getBookedFlights(numResults);
     }
 
-    /**
-     * Validates the parameters
-     *
-     * @param from      the source of the flight
-     * @param to        the destiny of the flight
-     * @param startDate the date of departure
-     * @param type      the type of flight ("oneWay", "roundTrip", "multiScale")
-     * @return false if any parameter is empty, true otherwise
-     */
-    public boolean validateSearchParameters(String from, String to, String startDate, String type) {
-        if (from.isEmpty() || to.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
+
+    boolean validateSearchParameters(String source, String destiny, String startDate, String type) {
+        logger.debug("validating the search parameters");
+        if (source.isEmpty() || source.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
             return false;
-        } else if (from.length() != 3 || to.length() != 3) {
+        } else if (source.length() != 3 || destiny.length() != 3) {
             return false;
-        } else if (from.equalsIgnoreCase(to)) {
+        } else if (source.equalsIgnoreCase(destiny)) {
             return false;
         }
         return true;

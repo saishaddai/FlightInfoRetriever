@@ -40,32 +40,20 @@ public class AirportDAOImpl extends BaseHibernateDAO<Airport, Long> implements A
     }
 
     @Override
-    public List<Airport> findAll() {
-        return find();
+    public List<Airport> findAll(int maxResults) {
+        return find(maxResults);
     }
 
     @Override
-    public List<Airport> autoComplete(String part, int maxRows) {
+    public List<Airport> autoComplete(String part, int expectedResults) {
         List<Airport> airports;
         String prefixSuffix = "%" + part + "%";
         Disjunction or = Restrictions.disjunction();
-
         or.add(Restrictions.ilike("iataCode", prefixSuffix, MatchMode.ANYWHERE));
-        if ((airports = findByCriteria(true, or)).size() >= maxRows) {
-            return airports;
-        }
-
         or.add(Restrictions.ilike("city", prefixSuffix, MatchMode.ANYWHERE));
-        if ((airports = findByCriteria(true, or)).size() >= maxRows) {
-            return airports;
-        }
-
         or.add(Restrictions.ilike("country", prefixSuffix, MatchMode.ANYWHERE));
-        if ((airports = findByCriteria(true, or)).size() >= maxRows) {
-            return airports;
-        }
-
         or.add(Restrictions.ilike("name", prefixSuffix, MatchMode.ANYWHERE));
-        return findByCriteria(true, or);
+        airports = findByCriteria(true, expectedResults, or);
+        return airports;
     }
 }

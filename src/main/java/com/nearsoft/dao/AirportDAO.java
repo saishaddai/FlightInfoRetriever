@@ -6,8 +6,9 @@ import java.util.List;
 
 public interface AirportDAO {
 
-    Airport findById(Long id);
+    public Airport findById(Long id);
 
-    List<Airport> autoComplete(String part, int maxRows);
-    List<Airport> findAll();
+    public List<Airport> autoComplete(String part, int maxRows);
+
+    public List<Airport> findAll(int maxResults);
 }

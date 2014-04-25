@@ -29,6 +29,7 @@ public class DespegarAPIService implements APIService {
 
     /**
      * Get flights that match with the given options
+     *
      * @param otherFilters depending of the content provider it may be helpful
      * @return a list of flight objects that match with the filters
      */
@@ -49,6 +50,7 @@ public class DespegarAPIService implements APIService {
 
     /**
      * Process the answer from API. It retrieves all the useful information in order to create Flight objects
+     *
      * @param response The response of API as JSON string
      * @return a list of flight objects with information retrieved from API response
      */
@@ -57,13 +59,12 @@ public class DespegarAPIService implements APIService {
             List<Flight> results = new ArrayList<>();
             Map<String, Object> partialResult;
             ObjectMapper mapper = new ObjectMapper();
-            Map apiResponse =  mapper.readValue( response.toString(), Map.class);
-            System.out.println(response.toString());
+            Map apiResponse = mapper.readValue(response.toString(), Map.class);
             if (apiResponse.get("errors") != null) {
                 throw new IOException("Error processing despegar.com response");
             }
             List<Map> flights = (List<Map>) apiResponse.get("flights");//first level  of results
-            for(Map flight : flights) {
+            for (Map flight : flights) {
                 partialResult = processFlights(flight); //"partial", "outboundRoutes"
                 partialResult = processOutboundRoutes((List<Map>) partialResult.get("outboundRoutes"), partialResult);
                 partialResult = processSegments((List<Map<String, Map>>) partialResult.get("segments"), partialResult);
@@ -75,13 +76,13 @@ public class DespegarAPIService implements APIService {
             }
             return results;
         } catch (NullPointerException | IndexOutOfBoundsException | IOException e) {
-            e.printStackTrace();
             throw new IOException("Error processing despegar.com response");
         }
     }
 
     /**
      * Process the first level of response from despegar.com API
+     *
      * @param flight a map of results from despegar,com containing flight information
      * @return the partial result with all the information already processed
      */
@@ -111,7 +112,7 @@ public class DespegarAPIService implements APIService {
     /**
      * process the segments of a despegar.com API response
      *
-     * @param segments a list of results from despegar,com containing segments
+     * @param segments      a list of results from despegar,com containing segments
      * @param partialResult the partial result with all the information already processed
      * @return the partial result with the new processed attributes
      */
@@ -147,9 +148,9 @@ public class DespegarAPIService implements APIService {
     /**
      * Formats a query for calling getFlights method in API
      *
-     * @param source the source place in IATA code fashion
+     * @param source  the source place in IATA code fashion
      * @param destiny the destiny place in IATA code fashion
-     * @param type the type of flight (one way, round trip). Default 'one way'
+     * @param type    the type of flight (one way, round trip). Default 'one way'
      */
     String formatGetFlightsQuery(String source, String destiny, String departureDate,
                                  String arrivingDate, int adults, int children,
@@ -169,6 +170,7 @@ public class DespegarAPIService implements APIService {
 
     /**
      * Gets a date given the lapse
+     *
      * @param lapse the lap of time to consider to create a date; 1 for a day, 2 for a week, 3 for a month
      * @return a date object with tha represents a date in the future
      */
@@ -177,13 +179,13 @@ public class DespegarAPIService implements APIService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
         switch (lapse) {
-            case DespegarAPIService.TOMORROW :
+            case DespegarAPIService.TOMORROW:
                 cal.add(Calendar.DAY_OF_YEAR, 1);
                 break;
-            case DespegarAPIService.NEXT_WEEK :
+            case DespegarAPIService.NEXT_WEEK:
                 cal.add(Calendar.WEEK_OF_YEAR, 1);
                 break;
-            case DespegarAPIService.NEXT_MONTH :
+            case DespegarAPIService.NEXT_MONTH:
                 cal.add(Calendar.MONTH, 1);
                 break;
         }

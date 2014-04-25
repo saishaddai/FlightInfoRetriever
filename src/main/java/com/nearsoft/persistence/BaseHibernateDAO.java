@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -25,8 +26,8 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
         return (T) getCurrentSession().get(getEntityClass(), id);
     }
 
-    protected List<T> find() {
-        return findByCriteria(true);
+    protected List<T> find(int maxResults) {
+        return findByCriteria(true, maxResults);
     }
 
     protected boolean create(T type) {
@@ -46,8 +47,8 @@ public abstract class BaseHibernateDAO<T, K extends Serializable> {
         return criteria;
     }
 
-    protected List<T> findByCriteria(boolean useCache, Criterion... criterion) {
-        Criteria criteria = createCriteria(useCache, criterion);
-        return criteria.list();
+    protected List<T> findByCriteria(boolean useCache, int maxResults, Criterion... criterion) {
+        Criteria criteria = createCriteria(useCache, criterion).setMaxResults(maxResults);
+        return criteria == null ? new ArrayList<>() : criteria.list();
     }
 }
