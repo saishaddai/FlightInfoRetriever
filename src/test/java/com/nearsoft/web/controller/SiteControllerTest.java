@@ -247,7 +247,6 @@ public class SiteControllerTest {
                 .andExpect(status().isOk()).andReturn().getResponse();
 
         String responseAsString = response.getContentAsString();
-        System.out.println(responseAsString);
         assertTrue(response.getContentType().equalsIgnoreCase("application/json;charset=UTF-8")); //which proves is a JSON
         assertTrue(responseAsString.equals("true"));//to prove that is a JSON and is true string
     }
