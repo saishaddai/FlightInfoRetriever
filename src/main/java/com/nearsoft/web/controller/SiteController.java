@@ -57,12 +57,12 @@ public class SiteController {
     @ResponseBody
     public List<Flight> searchFlights(@RequestParam("from") String source,
                                       @RequestParam("to") String destiny,
-                               @RequestParam("startDate") String startDate,
-                               @RequestParam("endDate") String endDate,
-                               @RequestParam("type") String type,
-                               @RequestParam(value = "numAdults", required = false, defaultValue = "1") int numAdults,
-                               @RequestParam(value = "numChildren", required = false, defaultValue = "0") int numChildren,
-                               @RequestParam(value = "numInfants", required = false, defaultValue = "0") int numInfants) {
+                                      @RequestParam("startDate") String startDate,
+                                      @RequestParam("endDate") String endDate,
+                                      @RequestParam("type") String type,
+                                      @RequestParam(value = "numAdults", required = false, defaultValue = "1") int numAdults,
+                                      @RequestParam(value = "numChildren", required = false, defaultValue = "0") int numChildren,
+                                      @RequestParam(value = "numInfants", required = false, defaultValue = "0") int numInfants) {
         List<Flight> results;
         if (validateSearchParameters(source, destiny, startDate, type)) {
             source = source.toUpperCase(); //in case it does not come as we want it
@@ -70,7 +70,7 @@ public class SiteController {
             try {
                 results = apiService.getFlights(source, destiny, startDate, endDate, numAdults, numChildren, numInfants, 1);
             } catch (ConnectException e) {
-                logger.warn("Unable to connect with API. Using mock answers", e);
+                logger.warn("Unable to connect with API. Using mock answers");
                 try {
                     results = mockApiService.getFlights(source, destiny, startDate, endDate, numAdults, numChildren, numInfants, 1);
                 } catch (ConnectException e1) {
@@ -130,7 +130,7 @@ public class SiteController {
 
     boolean validateSearchParameters(String source, String destiny, String startDate, String type) {
         logger.debug("validating the search parameters");
-        if (source.isEmpty() || source.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
+        if (source.isEmpty() || startDate.isEmpty() || type.isEmpty()) {
             return false;
         } else if (source.length() != 3 || destiny.length() != 3) {
             return false;
